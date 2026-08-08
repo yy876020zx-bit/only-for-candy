@@ -1,351 +1,665 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陈安怡，生日快乐！喵~ 🐱💖</title>
-    <!-- Canvas Confetti 动画库 -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        :root {
-            --pink-main: #ffb6c1;
-            --pink-soft: #fff0f5;
-            --pink-accent: #ff69b4;
-            --pink-dark: #db7093;
-        }
+npx create-next-app@latest an-yi-birthday
+TypeScript: Yes
+Tailwind: Yes
+App Router: Yes
+cd an-yi-birthday
+npm install framer-motion lucide-react
+an-yi-birthday
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
+app
+ ├── page.tsx
+ ├── layout.tsx
+ ├── level1
+ │    └── page.tsx
+ ├── level2
+ │    └── page.tsx
+ ├── gallery
+ │    └── page.tsx
+ ├── gift
+ │    └── page.tsx
+ └── final
+      └── page.tsx
 
-        body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #ffe6eb 0%, #ffd1dc 50%, #ffb6c1 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-            color: #5c3a41;
-        }
 
-        /* 浮动猫爪背景图案 */
-        .bg-paws {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.15;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="%23ff69b4"><path d="M12 10.5c-1.8 0-3.5 1.2-3.5 3 0 1.5 1.2 3.5 3.5 3.5s3.5-2 3.5-3.5c0-1.8-1.7-3-3.5-3zm-5.5-2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm11 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-12 5c.8 0 1.5-.7 1.5-1.5S6.3 10.5 5.5 10.5 4 11.2 4 12s.7 1.5 1.5 1.5zm13 0c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5-1.5.7-1.5 1.5.7 1.5 1.5 1.5z"/></svg>');
-        }
+components
+ ├── Cat.tsx
+ ├── Hearts.tsx
+ ├── HUD.tsx
+ ├── GameButton.tsx
+ └── Confetti.tsx
 
-        /* 主内容卡片 (玻璃拟态效果) */
-        .card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            border-radius: 28px;
-            padding: 40px 30px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.2);
-            z-index: 10;
-            position: relative;
-            animation: fadeIn 1.2s ease-out;
-        }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+context
+ └── GameContext.tsx
 
-        h1 {
-            color: var(--pink-dark);
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
-        }
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: #8b5a65;
-            margin-bottom: 25px;
-        }
+public
 
-        /* 蛋糕展示区 */
-        .cake-box {
-            font-size: 80px;
-            margin: 20px 0;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            display: inline-block;
-        }
+ images
+   cat.png
+   photo1.jpg
+   photo2.jpg
+   cake.png
 
-        .cake-box:hover {
-            transform: scale(1.15) rotate(-5deg);
-        }
+ sounds
+   birthday.mp3
+"use client"
 
-        /* 互动按钮 */
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 25px;
-        }
+import {
+createContext,
+useContext,
+useState
+} from "react"
 
-        .btn {
-            background: linear-gradient(135deg, #ff8da1, var(--pink-accent));
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
-            transition: all 0.3s ease;
-        }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.6);
-        }
+interface GameType{
 
-        .btn:active {
-            transform: translateY(0);
-        }
+stars:number
 
-        /* 右下角互动猫咪 */
-        .cat-companion {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            font-size: 60px;
-            cursor: pointer;
-            z-index: 100;
-            transition: transform 0.2s;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-        }
+level:number
 
-        .cat-companion:hover {
-            transform: scale(1.1);
-        }
+addStar:()=>void
 
-        /* 猫咪对话气泡 */
-        .bubble {
-            position: fixed;
-            bottom: 95px;
-            right: 20px;
-            background: white;
-            padding: 12px 18px;
-            border-radius: 18px;
-            border-bottom-right-radius: 2px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            font-size: 0.95rem;
-            color: var(--pink-dark);
-            z-index: 100;
-            display: none;
-            max-width: 200px;
-            animation: popUp 0.3s ease-out;
-        }
+unlock:()=>void
 
-        @keyframes popUp {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
+}
 
-        /* 音乐控制浮响 */
-        .music-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 100;
-            color: var(--pink-accent);
-        }
 
-        .playing {
-            animation: spin 3s linear infinite;
-        }
+const GameContext=createContext<GameType|null>(null)
 
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-</head>
+
+
+export function GameProvider({
+children
+}:{
+children:React.ReactNode
+}){
+
+
+const [stars,setStars]=useState(0)
+
+const [level,setLevel]=useState(1)
+
+
+
+function addStar(){
+
+setStars(
+s=>s+1
+)
+
+}
+
+
+function unlock(){
+
+setLevel(
+l=>l+1
+)
+
+}
+
+
+return (
+
+<GameContext.Provider
+
+value={{
+stars,
+level,
+addStar,
+unlock
+}}
+
+>
+
+{children}
+
+</GameContext.Provider>
+
+)
+
+}
+
+
+export function useGame(){
+
+return useContext(GameContext)!
+
+}
+    import "./globals.css"
+
+import {
+GameProvider
+}
+from "@/context/GameContext"
+
+
+export default function RootLayout({
+
+children
+
+}:{
+
+children:React.ReactNode
+
+}){
+
+
+return (
+
+<html lang="zh">
+
 <body>
 
-    <div class="bg-paws"></div>
 
-    <!-- 右上角音乐播放器 -->
-    <div class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</div>
+<GameProvider>
 
-    <!-- 主卡片 -->
-    <div class="card">
-        <h1>🎂 陈安怡，生日快乐！🐱</h1>
-        <p class="subtitle">愿你的新一岁充满小猫咪般的惬意与无忧无虑～</p>
+{children}
 
-        <!-- 可点击的蛋糕 -->
-        <div class="cake-box" onclick="triggerConfetti()" title="点击切蛋糕！">🎂</div>
+</GameProvider>
 
-        <p id="blessingText" style="margin: 15px 0; font-size: 1.05rem; line-height: 1.6;">
-            🐾 喵~ 踩着软绵绵的猫爪印，今天是属于安怡的专属好运日！
-        </p>
 
-        <div class="btn-group">
-            <button class="btn" onclick="triggerConfetti()">🎂 切蛋糕撒花</button>
-            <button class="btn" onclick="changeBlessing()">💌 换一个祝福</button>
-        </div>
-    </div>
-
-    <!-- 联动互动猫咪 -->
-    <div class="bubble" id="chatBubble">喵～点击我可以发射爱心哦！💖</div>
-    <div class="cat-companion" onclick="catInteract()" id="catPet">🐱</div>
-
-    <!-- 背景音频：生日快乐歌 MIDI/Instrumental -->
-    <audio id="bgm" loop src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a70d4d.mp3?filename=happy-birthday-15203.mp3"></audio>
-
-    <script>
-        // 祝福语数组
-        const blessings = [
-            "🐾 喵~ 踩着软绵绵的猫爪印，今天是属于安怡的专属好运日！",
-            "✨ 愿安怡像小猫一样，每天吃饱喝足，晒太阳，开开心心！",
-            "💖 新的一岁，愿所有的美好与温柔都如期而至，喵呜~",
-            "🐟 祝陈安怡生日快乐！罐头自由，快乐无忧！",
-            "🌸 愿你的世界像粉色云朵一样甜软，天天有好梦！"
-        ];
-
-        // 猫咪专属台词
-        const catQuotes = [
-            "喵呜~ 祝安怡越来越漂亮！🌸",
-            "咕噜咕噜... 给你一个猫猫头蹭蹭！🐱",
-            "陈安怡是今天全宇宙最棒的女孩子！✨",
-            "喵！记得吃蛋糕哦，分我一口！🎂",
-            "💖 爱心发射成功！"
-        ];
-
-        let blessingIndex = 0;
-
-        // 切换祝福语
-        function changeBlessing() {
-            blessingIndex = (blessingIndex + 1) % blessings.length;
-            document.getElementById('blessingText').innerText = blessings[blessingIndex];
-            triggerConfettiSmall();
-        }
-
-        // 触发满屏粉色彩带雨（全屏特效）
-        function triggerConfetti() {
-            const count = 200;
-            const defaults = {
-                origin: { y: 0.7 }
-            };
-
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
-            }
-
-            fire(0.25, {
-                spread: 26,
-                startVelocity: 55,
-                colors: ['#ffb6c1', '#ff69b4', '#ffffff']
-            });
-            fire(0.2, {
-                spread: 60,
-                colors: ['#ffc0cb', '#db7093']
-            });
-            fire(0.35, {
-                spread: 100,
-                decay: 0.91,
-                scalar: 0.8
-            });
-            fire(0.1, {
-                spread: 120,
-                startVelocity: 25,
-                decay: 0.92,
-                colors: ['#ffe4e1', '#ffffff']
-            });
-        }
-
-        // 轻量彩带
-        function triggerConfettiSmall() {
-            confetti({
-                particleCount: 30,
-                spread: 50,
-                origin: { y: 0.6 },
-                colors: ['#ffb6c1', '#ff69b4']
-            });
-        }
-
-        // 右下角猫咪交互联动
-        function catInteract() {
-            const bubble = document.getElementById('chatBubble');
-            const randomQuote = catQuotes[Math.floor(Math.random() * catQuotes.length)];
-            
-            bubble.innerText = randomQuote;
-            bubble.style.display = 'block';
-
-            // 猫咪跳跃动画
-            const cat = document.getElementById('catPet');
-            cat.style.transform = 'scale(1.3) translateY(-10px)';
-            setTimeout(() => {
-                cat.style.transform = 'scale(1)';
-            }, 200);
-
-            // 触发爱心彩带
-            confetti({
-                particleCount: 15,
-                scalar: 1.2,
-                shapes: ['circle'],
-                colors: ['#ff69b4', '#ff1493'],
-                origin: { x: 0.9, y: 0.9 }
-            });
-
-            // 3秒后自动隐藏气泡
-            clearTimeout(window.bubbleTimer);
-            window.bubbleTimer = setTimeout(() => {
-                bubble.style.display = 'none';
-            }, 3000);
-        }
-
-        // 背景音乐控制
-        function toggleMusic() {
-            const bgm = document.getElementById('bgm');
-            const btn = document.getElementById('musicBtn');
-            if (bgm.paused) {
-                bgm.play();
-                btn.classList.add('playing');
-                btn.innerText = '💖';
-            } else {
-                bgm.pause();
-                btn.classList.remove('playing');
-                btn.innerText = '🎵';
-            }
-        }
-
-        // 页面首次加载时自动弹窗引导
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('chatBubble').style.display = 'block';
-            }, 1000);
-        };
-    </script>
 </body>
+
 </html>
+
+
+)
+
+}
+    "use client"
+
+import {motion} from "framer-motion"
+
+
+export default function Cat(){
+
+
+return (
+
+<motion.div
+
+animate={{
+
+y:[0,-15,0]
+
+}}
+
+transition={{
+
+repeat:Infinity,
+
+duration:2
+
+}}
+
+className="text-8xl"
+
+>
+
+🐱
+
+
+</motion.div>
+
+
+)
+
+}
+    "use client"
+
+
+import {
+motion
+}
+from "framer-motion"
+
+
+export default function Hearts(){
+
+
+return (
+
+<div>
+
+
+{
+Array.from({
+length:20
+}).map((_,i)=>(
+
+<motion.div
+
+key={i}
+
+animate={{
+
+y:[0,-200],
+
+opacity:[1,0]
+
+}}
+
+transition={{
+
+duration:5,
+
+repeat:Infinity,
+
+delay:i*0.2
+
+}}
+
+className="fixed text-pink-400"
+
+style={{
+
+left:`${Math.random()*100}%`,
+
+bottom:0
+
+}}
+
+>
+
+💗
+
+</motion.div>
+
+
+))
+
+}
+
+
+</div>
+
+)
+
+}
+    "use client"
+
+import {
+useGame
+}
+from "@/context/GameContext"
+
+
+export default function HUD(){
+
+
+const {
+stars,
+level
+}=useGame()
+
+
+return (
+
+<div
+
+className="
+fixed
+top-5
+left-5
+right-5
+bg-white/70
+rounded-full
+p-3
+flex
+justify-between
+shadow
+z-50
+"
+
+>
+
+
+<div>
+
+🐾 安怡生日冒险
+
+</div>
+
+
+<div>
+
+⭐ {stars}
+
+&nbsp;
+
+LEVEL {level}
+
+</div>
+
+
+</div>
+
+)
+
+}
+    "use client"
+
+
+import Link from "next/link"
+
+import Cat from "@/components/Cat"
+
+import Hearts from "@/components/Hearts"
+
+
+
+export default function Home(){
+
+
+return (
+
+<main
+
+className="
+min-h-screen
+bg-pink-200
+flex
+items-center
+justify-center
+overflow-hidden
+"
+
+>
+
+
+<Hearts/>
+
+
+<div
+
+className="
+text-center
+bg-white/70
+rounded-3xl
+p-10
+shadow-xl
+"
+
+>
+
+
+<Cat/>
+
+
+<h1
+
+className="
+text-4xl
+font-bold
+text-pink-600
+"
+
+>
+
+安怡的生日小猫冒险
+
+</h1>
+
+
+<p
+
+className="
+mt-5
+"
+
+>
+
+欢迎来到只属于陈安怡的生日世界 💗
+
+</p>
+
+
+<Link
+
+href="/level1"
+
+className="
+inline-block
+mt-8
+bg-pink-500
+text-white
+px-8
+py-3
+rounded-full
+"
+
+>
+
+开始冒险 🐾
+
+</Link>
+
+
+</div>
+
+
+</main>
+
+)
+
+}
+    "use client"
+
+
+import {
+useState
+}
+from "react"
+
+
+import {
+useGame
+}
+from "@/context/GameContext"
+
+
+import Link from "next/link"
+
+
+
+export default function Level1(){
+
+
+const [found,setFound]=useState(false)
+
+const {
+addStar,
+unlock
+}=useGame()
+
+
+
+function find(){
+
+if(!found){
+
+setFound(true)
+
+addStar()
+
+unlock()
+
+}
+
+}
+
+
+return (
+
+<div
+
+className="
+min-h-screen
+bg-pink-100
+p-10
+text-center
+"
+
+>
+
+
+<h1
+
+className="text-3xl"
+
+>
+
+LEVEL 01
+
+</h1>
+
+
+<h2>
+
+找到藏起来的小猫 🐱
+
+</h2>
+
+
+
+<div
+
+className="
+grid
+grid-cols-3
+gap-5
+mt-10
+"
+
+>
+
+{
+
+["🎁","🌸","🪑","🧸","🐾","🐱"]
+
+.map(
+(item)=>(
+
+<button
+
+onClick={
+
+item==="🐱"
+
+?
+
+find
+
+:
+
+undefined
+
+}
+
+className="
+bg-white
+p-10
+rounded-xl
+text-4xl
+"
+
+key={item}
+
+>
+
+{item}
+
+</button>
+
+)
+
+)
+
+
+}
+
+
+</div>
+
+
+
+{
+
+found&&
+
+<div className="mt-10">
+
+<p>
+
+找到啦！小猫说：生日快乐安怡 💕
+
+</p>
+
+
+<Link
+
+href="/level2"
+
+className="
+bg-pink-500
+text-white
+px-5
+py-3
+rounded-full
+"
+
+>
+
+下一关
+
+</Link>
+
+
+</div>
+
+
+}
+
+
+
+</div>
+
+)
+
+}
+    an-yi-birthday/
+│
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── level1/page.tsx
+│   ├── level2/page.tsx
+│   ├── puzzle/page.tsx
+│   ├── quiz/page.tsx
+│   ├── cake/page.tsx
+│   ├── gift/page.tsx
+│   ├── gallery/page.tsx
+│   └── final/page.tsx
+│
+├── components/
+│   ├── Cat.tsx
+│   ├── HUD.tsx
+│   ├── Hearts.tsx
+│   ├── Music.tsx
+│   └── Gift.tsx
+│
+├── context/
+│   └── GameContext.tsx
+│
+└── public/
+    ├── images/
+    │   ├── cat.png
+    │   ├── photo1.jpg
+    │   ├── photo2.jpg
+    │   └── photo3.jpg
+    │
+    └── sounds/
+        └── birthday.mp3
+    
