@@ -1,1 +1,419 @@
 
+"use client";
+
+import { useRef, useState } from "react";
+
+type View =
+  | "home"
+  | "find"
+  | "hearts"
+  | "quiz"
+  | "gift"
+  | "gallery"
+  | "secret"
+  | "final";
+
+const photos = Array.from({ length: 8 }, (_, i) => `/images/photo${i + 1}.jpg`);
+
+export default function BirthdayCatAdventure() {
+  const [view, setView] = useState<View>("home");
+  const [stars, setStars] = useState(0);
+  const [found, setFound] = useState(false);
+  const [tip, setTip] = useState("点击房间里的物品，找到小猫！");
+  const [hearts, setHearts] = useState(Array.from({ length: 12 }, (_, i) => i));
+  const [quizDone, setQuizDone] = useState(false);
+  const [gift, setGift] = useState("");
+  const [logoClicks, setLogoClicks] = useState(0);
+  const [music, setMusic] = useState(false);
+  const audio = useRef<HTMLAudioElement | null>(null);
+
+  const win = () => setStars((n) => n + 1);
+
+  const toggleMusic = () => {
+    if (!audio.current) audio.current = new Audio("/sounds/birthday.mp3");
+
+    if (music) {
+      audio.current.pause();
+      setMusic(false);
+    } else {
+      audio.current.play().then(() => setMusic(true)).catch(() => setMusic(false));
+    }
+  };
+
+  const restart = () => {
+    setView("home");
+    setStars(0);
+    setFound(false);
+    setHearts(Array.from({ length: 12 }, (_, i) => i));
+    setQuizDone(false);
+    setGift("");
+  };
+
+  return (
+    <main className="site">
+      <header>
+        <button
+          className="logo"
+          onClick={() => setLogoClicks((n) => n + 1)}
+        >
+          🐾 安怡的生日冒险
+        </button>
+
+        <div>⭐ {stars}</div>
+
+        <button onClick={toggleMusic}>
+          🎵 {music ? "暂停音乐" : "播放音乐"}
+        </button>
+      </header>
+
+      {logoClicks >= 5 && (
+        <button className="secret-button" onClick={() => setView("secret")}>
+          🐱 发现隐藏猫咪！
+        </button>
+      )}
+
+      <section className="card">
+        {view === "home" && (
+          <>
+            <div className="cat">🐱</div>
+            <p>WELCOME TO THE BIRTHDAY WONDERLAND</p>
+            <h1>安怡，欢迎来到<br />你的生日世界 💗</h1>
+            <p>今天的主角是——陈 · 安 · 怡</p>
+            <button className="primary" onClick={() => setView("find")}>
+              开始生日冒险 →
+            </button>
+          </>
+        )}
+
+        {view === "find" && (
+          <>
+            <p>LEVEL 01</p>
+            <h2>寻找迷路的小猫 🐱</h2>
+            <p>{tip}</p>
+
+            <div className="grid">
+              {["🎁", "🌸", "🧸", "🪟", "🪑", "🐱"].map((item, i) => (
+                <button
+                  className="item"
+                  key={i}
+                  onClick={() => {
+                    if (item === "🐱") {
+                      setFound(true);
+                      setTip("找到我啦！生日快乐安怡～ 💕");
+                    } else {
+                      setTip("不是这里喵～🐾");
+                    }
+                  }}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+
+            {found && (
+              <button
+                className="primary"
+                onClick={() => {
+                  win();
+                  setView("hearts");
+                }}
+              >
+                获得星星，进入下一关 ⭐
+              </button>
+            )}
+          </>
+        )}
+
+        {view === "hearts" && (
+          <>
+            <p>LEVEL 02</p>
+            <h2>收集生日爱心 💗</h2>
+            <p>点击所有爱心，帮小猫收集祝福！</p>
+
+            <div className="heart-box">
+              {hearts.map((heart) => (
+                <button
+                  className="heart"
+                  key={heart}
+                  onClick={() => setHearts((items) => items.filter((x) => x !== heart))}
+                >
+                  💗
+                </button>
+              ))}
+            </div>
+
+            {hearts.length === 0 && (
+              <button
+                className="primary"
+                onClick={() => {
+                  win();
+                  setView("quiz");
+                }}
+              >
+                爱心收集完成，继续冒险 →
+              </button>
+            )}
+          </>
+        )}
+
+        {view === "quiz" && (
+          <>
+            <p>LEVEL 03</p>
+            <h2>生日小问答 💌</h2>
+            <h3>安怡今天最该收到什么？</h3>
+
+            <div className="answers">
+              {["超级大的生日蛋糕", "很多很多拥抱", "猫咪陪伴", "以上全部"].map(
+                (answer) => (
+                  <button
+                    key={answer}
+                    onClick={() => setQuizDone(true)}
+                  >
+                    {answer}
+                  </button>
+                )
+              )}
+            </div>
+
+            {quizDone && (
+              <>
+                <p>喵！答案当然是：全部都要！</p>
+                <button
+                  className="primary"
+                  onClick={() => {
+                    win();
+                    setView("gift");
+                  }}
+                >
+                  解锁礼物房间 🎁
+                </button>
+              </>
+            )}
+          </>
+        )}
+
+        {view === "gift" && (
+          <>
+            <p>LEVEL 04</p>
+            <h2>生日礼物房间 🎁</h2>
+
+            <div className="grid">
+              {[
+                ["🎁", "一个隔空拥抱"],
+                ["🎀", "愿你每天都开心"],
+                ["💌", "有人认真祝你生日快乐"],
+                ["✨", "神秘最终惊喜"],
+              ].map(([emoji, text]) => (
+                <button
+                  className="item"
+                  key={text}
+                  onClick={() => setGift(text)}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+
+            {gift && (
+              <>
+                <h3>{gift}</h3>
+                <button className="primary" onClick={() => setView("gallery")}>
+                  打开回忆相册 📸
+                </button>
+              </>
+            )}
+          </>
+        )}
+
+        {view === "gallery" && (
+          <>
+            <p>MEMORY ALBUM</p>
+            <h2>安怡的回忆相册 📸</h2>
+            <p>把照片放进 <code>public/images/photo1.jpg</code> 到 <code>photo8.jpg</code>。</p>
+
+            <div className="photos">
+              {photos.map((src, i) => (
+                <div className="photo" key={src}>
+                  <img
+                    src={src}
+                    alt={`安怡的回忆 ${i + 1}`}
+                    onError={(event) => {
+                      event.currentTarget.style.display = "none";
+                    }}
+                  />
+                  <span>{["🌸", "🐱", "🎂", "💗"][i % 4]}</span>
+                  <p>珍贵回忆 {i + 1}</p>
+                </div>
+              ))}
+            </div>
+
+            <button className="primary" onClick={() => setView("final")}>
+              打开最终祝福 💗
+            </button>
+          </>
+        )}
+
+        {view === "secret" && (
+          <>
+            <div className="cat">🐱🐱🐱</div>
+            <h2>SECRET CAT ROOM</h2>
+            <p>你发现我啦！愿安怡永远被温柔和快乐包围。</p>
+            <button className="primary" onClick={() => setView("home")}>
+              回到冒险地图
+            </button>
+          </>
+        )}
+
+        {view === "final" && (
+          <>
+            <div className="cat">🐱</div>
+            <h1>陈安怡<br />生日快乐！✨</h1>
+            <p>愿你新的一岁：</p>
+            <p>有很多很多开心。</p>
+            <p>有喜欢的人和事。</p>
+            <p>有值得期待的明天。</p>
+            <p>也希望每一个普通的日子，都有人认真地爱着你。</p>
+
+            <button className="primary" onClick={restart}>
+              再玩一次 ↻
+            </button>
+          </>
+        )}
+      </section>
+
+      <style jsx global>{`
+        * { box-sizing: border-box; }
+        body {
+          margin: 0;
+          font-family: Arial, "PingFang SC", sans-serif;
+          color: #8b3a67;
+          background: linear-gradient(135deg, #ffd5e8, #f6ddff, #d9ecff);
+        }
+        .site {
+          min-height: 100vh;
+          padding: 18px;
+          background-image: radial-gradient(#fff 1px, transparent 1px);
+          background-size: 28px 28px;
+        }
+        header {
+          max-width: 900px;
+          margin: auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 10px;
+          background: #ffffffdd;
+          padding: 12px 16px;
+          border-radius: 18px;
+        }
+        button {
+          border: 0;
+          cursor: pointer;
+          border-radius: 16px;
+          padding: 10px 14px;
+          font: inherit;
+          color: #8b3a67;
+        }
+        .logo { background: transparent; font-weight: bold; }
+        .card {
+          max-width: 760px;
+          min-height: 500px;
+          margin: 40px auto;
+          padding: 35px 20px;
+          text-align: center;
+          background: #ffffffdd;
+          border-radius: 30px;
+          box-shadow: 0 15px 50px #bd6b9955;
+        }
+        h1 { font-size: clamp(36px, 7vw, 64px); margin: 12px 0; }
+        h2 { font-size: 32px; }
+        .cat { font-size: 110px; animation: float 2s infinite; }
+        .primary {
+          margin-top: 22px;
+          background: linear-gradient(135deg, #fa5da9, #b968e9);
+          color: white;
+          font-weight: bold;
+          padding: 14px 22px;
+          border-radius: 999px;
+        }
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 14px;
+          max-width: 560px;
+          margin: 25px auto;
+        }
+        .item {
+          min-height: 100px;
+          font-size: 44px;
+          background: #fff;
+          box-shadow: 0 5px 15px #d78ab444;
+        }
+        .heart-box {
+          min-height: 260px;
+          padding: 25px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 16px;
+          background: linear-gradient(#c7ecff, #ffe4f1);
+          border-radius: 24px;
+        }
+        .heart {
+          font-size: 35px;
+          background: transparent;
+          animation: float 1.5s infinite alternate;
+        }
+        .answers { display: grid; gap: 12px; max-width: 440px; margin: 25px auto; }
+        .answers button { background: white; border: 2px solid #ffc3df; }
+        .photos {
+          columns: 2 150px;
+          gap: 12px;
+          text-align: left;
+          margin: 25px 0;
+        }
+        .photo {
+          break-inside: avoid;
+          position: relative;
+          min-height: 140px;
+          margin-bottom: 12px;
+          overflow: hidden;
+          padding: 8px;
+          background: white;
+          border-radius: 16px;
+        }
+        .photo img {
+          width: 100%;
+          height: 115px;
+          object-fit: cover;
+          border-radius: 10px;
+        }
+        .photo span {
+          display: block;
+          height: 115px;
+          padding-top: 28px;
+          text-align: center;
+          font-size: 48px;
+          background: #ffe0ef;
+          border-radius: 10px;
+        }
+        .photo p { margin: 8px 2px; font-size: 14px; }
+        .secret-button {
+          position: fixed;
+          right: 18px;
+          bottom: 18px;
+          z-index: 2;
+          background: #ffe58e;
+        }
+        @keyframes float {
+          from { transform: translateY(0); }
+          to { transform: translateY(-12px); }
+        }
+        @media (max-width: 500px) {
+          .grid { grid-template-columns: repeat(2, 1fr); }
+          header { font-size: 13px; }
+        }
+      `}</style>
+    </main>
+  );
+}
