@@ -2,184 +2,367 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>安怡的生日小猫冒险</title>
   <style>
-    * { box-sizing: border-box; }
+    :root { --pink:#f65da8; --ink:#81375e; --card:#ffffffdf; }
+    * { box-sizing:border-box; }
     body {
-      margin: 0; min-height: 100vh; color: #82385f;
-      font-family: Arial, "PingFang SC", sans-serif;
-      background: linear-gradient(135deg, #ffd6e9, #f5dfff, #dceeff);
+      margin:0; min-height:100vh; color:var(--ink);
+      font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+      background:
+        radial-gradient(#fff 1px, transparent 1.5px) 0 0/28px 28px,
+        linear-gradient(135deg,#ffd5e8,#f5ddff 52%,#d9edff);
     }
     header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 20px; background: #ffffffdd; box-shadow: 0 3px 16px #c56e9b44;
+      position:sticky; top:0; z-index:5; display:flex; align-items:center;
+      justify-content:space-between; gap:8px; padding:12px 18px;
+      background:#ffffffdd; box-shadow:0 4px 18px #bd6b9940;
     }
     button {
-      border: 0; border-radius: 16px; padding: 12px 16px;
-      cursor: pointer; color: #82385f; font-size: 16px;
+      border:0; border-radius:16px; padding:11px 15px; cursor:pointer;
+      color:var(--ink); background:white; font:inherit; font-weight:700;
     }
+    button:hover { transform:translateY(-2px); }
     .main {
-      max-width: 760px; min-height: 520px; margin: 38px auto; padding: 36px 22px;
-      text-align: center; background: #ffffffdd; border-radius: 30px;
-      box-shadow: 0 18px 50px #b76a9555;
+      width:min(860px,calc(100% - 28px)); min-height:540px; margin:34px auto;
+      padding:34px 20px; text-align:center; background:var(--card);
+      border-radius:30px; box-shadow:0 18px 55px #b76a9550;
     }
-    .cat { font-size: 110px; animation: float 2s infinite alternate; }
-    .primary { margin: 16px 4px; color: white; font-weight: bold; background: linear-gradient(135deg, #fa5ba8, #bd69e8); }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 25px auto; max-width: 560px; }
-    .item { min-height: 105px; font-size: 42px; background: white; box-shadow: 0 5px 14px #d684ae44; }
-    .heart-area { min-height: 250px; padding: 18px; border-radius: 22px; background: linear-gradient(#c9edff, #ffe3f0); }
-    .heart { font-size: 34px; margin: 8px; background: transparent; animation: float 1s infinite alternate; }
-    .answers { display: grid; gap: 10px; max-width: 450px; margin: 25px auto; }
-    .answers button { background: white; border: 2px solid #ffc4df; }
-    .photos { columns: 2 160px; gap: 12px; margin-top: 24px; text-align: left; }
-    .photo { break-inside: avoid; margin-bottom: 12px; padding: 9px; background: white; border-radius: 16px; }
-    .photo img { width: 100%; height: 125px; border-radius: 10px; object-fit: cover; background: #ffd8e9; }
-    .photo p { margin: 8px 3px 2px; }
-    #secret { display: none; position: fixed; right: 18px; bottom: 18px; background: #ffe48a; }
-    @keyframes float { to { transform: translateY(-12px) rotate(3deg); } }
-    @media (max-width: 500px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    .primary {
+      margin:14px 4px; color:white;
+      background:linear-gradient(135deg,#fa5ba9,#b96be7);
+      border-radius:999px;
+    }
+    .gold { background:linear-gradient(135deg,#ffe79d,#f6c75f); }
+    .cat { font-size:110px; animation:float 2s infinite alternate; }
+    .grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+      max-width:590px; margin:24px auto;
+    }
+    .item {
+      min-height:105px; font-size:42px; background:#fff;
+      box-shadow:0 6px 17px #d582ae3d;
+    }
+    .notice { padding:13px; margin:18px auto; max-width:570px; border-radius:15px; background:#fff3a8; }
+    .success { background:#d9ffe6; }
+    .heart-area {
+      min-height:280px; padding:18px; border-radius:25px;
+      background:linear-gradient(#c9ecff,#ffe2f0);
+    }
+    .heart { font-size:34px; margin:6px; background:transparent; animation:float 1.2s infinite alternate; }
+    .puzzle {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:7px;
+      max-width:390px; margin:25px auto;
+    }
+    .piece {
+      aspect-ratio:1; font-size:28px; color:white;
+      background:linear-gradient(135deg,#ff91c3,#a873f4);
+    }
+    .selected { outline:4px solid #ffe570; }
+    .answers { display:grid; gap:10px; max-width:500px; margin:25px auto; }
+    .answers button { text-align:left; border:2px solid #ffc4df; }
+    .candle { font-size:44px; background:transparent; }
+    .off { opacity:.35; filter:grayscale(1); }
+    .photos { columns:2 165px; gap:13px; text-align:left; }
+    .photo {
+      position:relative; break-inside:avoid; margin-bottom:13px; padding:9px;
+      min-height:155px; overflow:hidden; background:white; border-radius:17px;
+    }
+    .photo img { position:relative; z-index:1; width:100%; height:122px; object-fit:cover; border-radius:10px; }
+    .placeholder {
+      position:absolute; inset:9px 9px auto; height:122px; display:grid;
+      place-items:center; font-size:48px; border-radius:10px; background:#ffd9e9;
+    }
+    .photo p { margin:9px 3px 2px; }
+    #paw {
+      position:fixed; right:12px; bottom:12px; z-index:6; opacity:.35;
+      background:transparent; font-size:28px;
+    }
+    #secretLink { display:none; position:fixed; left:12px; bottom:12px; z-index:6; }
+    @keyframes float { to { transform:translateY(-12px) rotate(3deg); } }
+    @media (max-width:520px) {
+      header { font-size:13px; padding:10px; }
+      .grid { grid-template-columns:repeat(2,1fr); }
+      .main { margin-top:20px; }
+    }
   </style>
 </head>
 <body>
   <header>
     <button onclick="tapLogo()">🐾 安怡的生日冒险</button>
-    <strong id="score">⭐ 0</strong>
-    <button onclick="music()">🎵 音乐</button>
+    <strong id="hud">⭐ 0</strong>
+    <button onclick="toggleMusic()">🎵 音乐</button>
   </header>
 
-  <button id="secret" onclick="secretRoom()">🐱 发现隐藏猫咪！</button>
+  <button id="secretLink" class="gold" onclick="go('secret')">🐱 秘密房间</button>
+  <button id="paw" onclick="tapPaw()">🐾</button>
   <main class="main" id="app"></main>
 
   <script>
-    let stars = 0, logoClicks = 0, hearts = 12, audio;
+    const app = document.getElementById("app");
+    const state = {
+      page: "home", stars: 0, done: {}, logo: 0, paw: 0,
+      hearts: [], heartScore: 0, puzzle: [8, 3, 5, 1, 7, 2, 9, 4, 6],
+      selectedPiece: null, quiz: 0, gifts: [], candles: [1,1,1,1,1],
+      secrets: new Set(), audio: null
+    };
 
-    function updateScore() {
-      document.getElementById("score").textContent = "⭐ " + stars;
+    const questions = [
+      ["今天最想去哪里？", ["海边", "游乐园", "有猫的咖啡馆", "说走就走"]],
+      ["哪一种小猫最可爱？", ["橘猫", "布偶猫", "所有小猫", "当然是我"]],
+      ["生日最想收到什么？", ["拥抱", "惊喜", "蛋糕", "温柔的一天"]]
+    ];
+
+    function updateHud() {
+      document.getElementById("hud").textContent = `⭐ ${state.stars}  🎁 ${state.gifts.length}`;
+      if (state.secrets.size >= 3) document.getElementById("secretLink").style.display = "block";
+    }
+
+    function award(name, nextPage) {
+      if (!state.done[name]) {
+        state.done[name] = true;
+        state.stars++;
+      }
+      go(nextPage);
+    }
+
+    function go(page) {
+      state.page = page;
+      render();
     }
 
     function tapLogo() {
-      logoClicks++;
-      if (logoClicks >= 5) document.getElementById("secret").style.display = "block";
+      state.logo++;
+      if (state.logo >= 7) state.secrets.add("logo");
+      render();
     }
 
-    function music() {
-      if (!audio) audio = new Audio("sounds/birthday.mp3");
-      audio.paused ? audio.play().catch(() => alert("请把音乐放到 sounds/birthday.mp3")) : audio.pause();
+    function tapPaw() {
+      state.paw++;
+      if (state.paw >= 5) state.secrets.add("paw");
+      render();
     }
 
-    function home() {
-      app.innerHTML = `
-        <div class="cat">🐱</div>
-        <p>WELCOME TO THE BIRTHDAY WONDERLAND</p>
-        <h1>安怡，欢迎来到<br>你的生日世界 💗</h1>
-        <p>今天的主角是——陈 · 安 · 怡</p>
-        <button class="primary" onclick="findCat()">开始生日冒险 →</button>`;
+    function toggleMusic() {
+      if (!state.audio) state.audio = new Audio("sounds/birthday.mp3");
+      state.audio.paused
+        ? state.audio.play().catch(() => alert("请把音乐放到 sounds/birthday.mp3"))
+        : state.audio.pause();
     }
 
-    function findCat() {
-      const items = ["🎁", "🌸", "🧸", "🪟", "🪑", "🐱"];
-      app.innerHTML = `
-        <p>LEVEL 01</p><h2>寻找迷路的小猫 🐱</h2>
-        <p id="tip">点击房间里的物品，找到小猫！</p>
-        <div class="grid">
-          ${items.map(x => `<button class="item" onclick="checkCat('${x}')">${x}</button>`).join("")}
-        </div>`;
-    }
-
-    function checkCat(item) {
-      if (item !== "🐱") {
-        document.getElementById("tip").textContent = "不是这里喵～🐾";
-        return;
+    let typed = "";
+    window.addEventListener("keydown", (event) => {
+      typed = (typed + event.key.toLowerCase()).slice(-4);
+      if (typed === "anyi") {
+        state.secrets.add("keyboard");
+        render();
       }
-      app.innerHTML += `
-        <p>找到我啦！生日快乐安怡～ 💕</p>
-        <button class="primary" onclick="stars++; updateScore(); heartGame()">获得星星，下一关 →</button>`;
+    });
+
+    function render() {
+      updateHud();
+
+      if (state.page === "home") {
+        app.innerHTML = `
+          <div class="cat">🐱</div>
+          <p>WELCOME TO THE BIRTHDAY WONDERLAND</p>
+          <h1>安怡，欢迎来到<br>你的生日世界 💗</h1>
+          <p>今天的主角是——<b>陈 · 安 · 怡</b></p>
+          <button class="primary" onclick="go('find')">开始生日冒险 →</button>
+          <p>小提示：连续点击左上角标题、输入 AN YI、或寻找猫爪。</p>`;
+      }
+
+      if (state.page === "find") {
+        app.innerHTML = `
+          <p>LEVEL 01</p><h2>寻找迷路的小猫 🐱</h2>
+          <p id="tip">点击房间里的物品，找到小猫！</p>
+          <div class="grid">
+            ${["🎁","🌸","🧸","🪟","🪑","🐱"].map(x =>
+              `<button class="item" onclick="findCat('${x}')">${x}</button>`
+            ).join("")}
+          </div>`;
+      }
+
+      if (state.page === "hearts") {
+        if (!state.hearts.length) {
+          state.hearts = Array.from({length:18}, (_, id) => {
+            const icon = Math.random() < .14 ? "💣" : Math.random() < .25 ? "⭐" : "💗";
+            return { id, icon };
+          });
+        }
+        app.innerHTML = `
+          <p>LEVEL 02</p><h2>收集生日爱心 💗</h2>
+          <p>目标 15 分：爱心 +1、星星 +2、炸弹 -2。</p>
+          <h3>得分：${state.heartScore} / 15</h3>
+          <div class="heart-area">
+            ${state.hearts.map(x =>
+              `<button class="heart" onclick="collectHeart(${x.id}, '${x.icon}')">${x.icon}</button>`
+            ).join("")}
+          </div>
+          ${state.heartScore >= 15
+            ? `<button class="primary" onclick="award('hearts','puzzle')">获得星星，继续冒险 →</button>`
+            : ""}`;
+      }
+
+      if (state.page === "puzzle") {
+        const complete = state.puzzle.every((n, i) => n === i + 1);
+        app.innerHTML = `
+          <p>LEVEL 03</p><h2>记忆拼图 🧩</h2>
+          <p>点击两块数字交换位置，把 1 到 9 排整齐。</p>
+          <div class="puzzle">
+            ${state.puzzle.map((n, i) =>
+              `<button class="piece ${state.selectedPiece === i ? "selected" : ""}"
+                onclick="movePiece(${i})">${n}</button>`
+            ).join("")}
+          </div>
+          ${complete
+            ? `<div class="notice success">原来最珍贵的礼物，是一起留下的回忆。</div>
+               <button class="primary" onclick="award('puzzle','quiz')">继续冒险 →</button>`
+            : `<button onclick="resetPuzzle()">重新洗牌</button>`}`;
+      }
+
+      if (state.page === "quiz") {
+        if (state.quiz >= questions.length) {
+          app.innerHTML = `
+            <p>LEVEL 04</p><h2>安怡的生日性格卡 💌</h2>
+            <div class="notice success">
+              🌸 温柔指数：98%<br>
+              🐱 猫咪亲和力：100%<br>
+              💗 可爱指数：99%<br>
+              ✨ 幸运值：∞
+            </div>
+            <button class="primary" onclick="award('quiz','cake')">进入蛋糕关 →</button>`;
+        } else {
+          const q = questions[state.quiz];
+          app.innerHTML = `
+            <p>LEVEL 04 · ${state.quiz + 1}/3</p>
+            <h2>生日小问答 💌</h2><h3>${q[0]}</h3>
+            <div class="answers">
+              ${q[1].map(x => `<button onclick="answerQuiz()">${x}</button>`).join("")}
+            </div>`;
+        }
+      }
+
+      if (state.page === "cake") {
+        const allOff = state.candles.every(x => !x);
+        app.innerHTML = `
+          <p>LEVEL 05</p><h2>拯救生日蛋糕 🎂</h2>
+          <p>${allOff ? "现在，可以许愿啦。✨" : "点击蜡烛，把它们全部吹灭！"}</p>
+          <div style="font-size:90px">🎂</div>
+          <div>
+            ${state.candles.map((on, i) =>
+              `<button class="candle ${on ? "" : "off"}" onclick="blow(${i})">${on ? "🕯️" : "💨"}</button>`
+            ).join("")}
+          </div>
+          ${allOff
+            ? `<div class="notice success">✨ 生日快乐！愿你的愿望都会实现。✨</div>
+               <button class="primary" onclick="award('cake','gift')">走进礼物房间 →</button>`
+            : ""}`;
+      }
+
+      if (state.page === "gift") {
+        const gifts = [
+          ["hug", "🎁", "一个隔空拥抱，愿安怡被认真爱着。"],
+          ["wish", "🎀", "愿你每天都有值得期待的小惊喜。"],
+          ["album", "📸", "打开一扇通往珍贵回忆的门。"],
+          ["secretGift", "✨", "神秘礼物：最认真的生日祝福。"]
+        ];
+        app.innerHTML = `
+          <p>LEVEL 06</p><h2>礼物房间 🎁</h2>
+          <p>点击礼物，收下属于安怡的心意。</p>
+          <div class="grid">
+            ${gifts.map(g => `<button class="item" onclick="openGift('${g[0]}','${g[2]}')">
+              ${state.gifts.includes(g[0]) ? "💝" : g[1]}
+            </button>`).join("")}
+          </div>
+          ${state.gifts.includes("album") ? `<button class="primary" onclick="go('gallery')">查看回忆相册 📸</button>` : ""}
+          ${state.gifts.includes("secretGift") ? `<button class="primary" onclick="go('final')">打开最终惊喜 💗</button>` : ""}`;
+      }
+
+      if (state.page === "gallery") {
+        app.innerHTML = `
+          <p>MEMORY ALBUM</p><h2>安怡的回忆相册 📸</h2>
+          <p>把照片放进 <code>images/photo1.jpg</code> 到 <code>photo8.jpg</code>。</p>
+          <div class="photos">
+            ${Array.from({length:8}, (_, i) => `
+              <div class="photo">
+                <div class="placeholder">${["🌸","🐱","🎂","💗"][i % 4]}</div>
+                <img src="images/photo${i+1}.jpg" alt="回忆 ${i+1}" onerror="this.style.display='none'">
+                <p>珍贵回忆 ${i+1}</p>
+              </div>`).join("")}
+          </div>
+          <button class="primary" onclick="go('gift')">回到礼物房间 →</button>`;
+      }
+
+      if (state.page === "secret") {
+        app.innerHTML = `
+          <div class="cat">🐱🐱🐱</div>
+          <p>SECRET CAT ROOM</p><h2>你发现我啦！</h2>
+          <p>小猫们偷偷祝愿：愿安怡永远被喜欢的人和温柔的日子包围。</p>
+          <button class="primary" onclick="go('home')">回到冒险地图</button>`;
+      }
+
+      if (state.page === "final") {
+        app.innerHTML = `
+          <div class="cat">🐱</div>
+          <h1>陈安怡<br>生日快乐！✨</h1>
+          <p>愿你新的一岁——</p>
+          <p>有很多很多开心。</p>
+          <p>有喜欢的人和事。</p>
+          <p>有值得期待的明天。</p>
+          <p>也希望每一个普通的日子，都有人认真地爱着你。</p>
+          <button class="primary" onclick="location.reload()">重新开始冒险 ↻</button>`;
+      }
     }
 
-    function heartGame() {
-      app.innerHTML = `
-        <p>LEVEL 02</p><h2>收集生日爱心 💗</h2>
-        <p>点击完所有爱心即可通关。</p>
-        <div class="heart-area" id="heartArea"></div>`;
-      renderHearts();
+    function findCat(item) {
+      if (item === "🐱") {
+        document.getElementById("tip").innerHTML = "找到我啦！生日快乐安怡～ 💕<br><button class='primary' onclick=\"award('find','hearts')\">获得星星，下一关 →</button>";
+      } else {
+        document.getElementById("tip").textContent = "不是这里喵～🐾";
+      }
     }
 
-    function renderHearts() {
-      const area = document.getElementById("heartArea");
-      area.innerHTML = Array.from({ length: hearts }, (_, i) =>
-        `<button class="heart" onclick="collectHeart()">💗</button>`
-      ).join("");
+    function collectHeart(id, icon) {
+      state.hearts = state.hearts.filter(x => x.id !== id);
+      state.heartScore = Math.max(0, state.heartScore + (icon === "💣" ? -2 : icon === "⭐" ? 2 : 1));
+      render();
     }
 
-    function collectHeart() {
-      hearts--;
-      if (hearts > 0) return renderHearts();
-
-      app.innerHTML += `
-        <p>安怡收集到了好多好多爱心！</p>
-        <button class="primary" onclick="stars++; updateScore(); quiz()">继续冒险 →</button>`;
+    function movePiece(index) {
+      if (state.selectedPiece === null) state.selectedPiece = index;
+      else {
+        [state.puzzle[state.selectedPiece], state.puzzle[index]] =
+          [state.puzzle[index], state.puzzle[state.selectedPiece]];
+        state.selectedPiece = null;
+      }
+      render();
     }
 
-    function quiz() {
-      app.innerHTML = `
-        <p>LEVEL 03</p><h2>生日小问答 💌</h2>
-        <h3>安怡今天最该收到什么？</h3>
-        <div class="answers">
-          <button onclick="gift()">超级大的生日蛋糕</button>
-          <button onclick="gift()">很多很多拥抱</button>
-          <button onclick="gift()">猫咪陪伴</button>
-          <button onclick="gift()">以上全部</button>
-        </div>`;
+    function resetPuzzle() {
+      state.puzzle = [8, 3, 5, 1, 7, 2, 9, 4, 6];
+      state.selectedPiece = null;
+      render();
     }
 
-    function gift() {
-      stars++;
-      updateScore();
-      app.innerHTML = `
-        <p>LEVEL 04</p><h2>生日礼物房间 🎁</h2>
-        <div class="grid">
-          <button class="item" onclick="alert('愿安怡每天都开心！')">🎁</button>
-          <button class="item" onclick="alert('一个超级大的拥抱！')">🎀</button>
-          <button class="item" onclick="alert('生日快乐，永远可爱！')">💌</button>
-          <button class="item" onclick="gallery()">📸</button>
-        </div>
-        <button class="primary" onclick="gallery()">打开回忆相册 →</button>`;
+    function answerQuiz() {
+      state.quiz++;
+      render();
     }
 
-    function gallery() {
-      app.innerHTML = `
-        <p>MEMORY ALBUM</p><h2>安怡的回忆相册 📸</h2>
-        <p>把照片放进 images/photo1.jpg 到 images/photo8.jpg。</p>
-        <div class="photos">
-          ${Array.from({ length: 8 }, (_, i) => `
-            <div class="photo">
-              <img src="images/photo${i + 1}.jpg" alt="回忆 ${i + 1}">
-              <p>珍贵回忆 ${i + 1} 💗</p>
-            </div>`).join("")}
-        </div>
-        <button class="primary" onclick="final()">打开最终祝福 →</button>`;
+    function blow(index) {
+      state.candles[index] = 0;
+      render();
     }
 
-    function secretRoom() {
-      app.innerHTML = `
-        <div class="cat">🐱🐱🐱</div>
-        <h2>SECRET CAT ROOM</h2>
-        <p>你发现我啦！愿安怡永远被温柔和快乐包围。</p>
-        <button class="primary" onclick="home()">回到首页</button>`;
+    function openGift(id, text) {
+      if (!state.gifts.includes(id)) state.gifts.push(id);
+      alert(text);
+      render();
     }
 
-    function final() {
-      app.innerHTML = `
-        <div class="cat">🐱</div>
-        <h1>陈安怡<br>生日快乐！✨</h1>
-        <p>愿你新的一岁，有很多很多开心。</p>
-        <p>有喜欢的人和事，有值得期待的明天。</p>
-        <p>也希望每一个普通的日子，都有人认真地爱着你。</p>
-        <button class="primary" onclick="location.reload()">再玩一次 ↻</button>`;
-    }
-
-    home();
+    render();
   </script>
 </body>
 </html>
