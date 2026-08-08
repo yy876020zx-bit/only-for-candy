@@ -45,4 +45,141 @@
   <header>
     <button onclick="tapLogo()">🐾 安怡的生日冒险</button>
     <strong id="score">⭐ 0</strong>
-    <button onclick="music()">🎵 音乐</button
+    <button onclick="music()">🎵 音乐</button>
+  </header>
+
+  <button id="secret" onclick="secretRoom()">🐱 发现隐藏猫咪！</button>
+  <main class="main" id="app"></main>
+
+  <script>
+    let stars = 0, logoClicks = 0, hearts = 12, audio;
+
+    function updateScore() {
+      document.getElementById("score").textContent = "⭐ " + stars;
+    }
+
+    function tapLogo() {
+      logoClicks++;
+      if (logoClicks >= 5) document.getElementById("secret").style.display = "block";
+    }
+
+    function music() {
+      if (!audio) audio = new Audio("sounds/birthday.mp3");
+      audio.paused ? audio.play().catch(() => alert("请把音乐放到 sounds/birthday.mp3")) : audio.pause();
+    }
+
+    function home() {
+      app.innerHTML = `
+        <div class="cat">🐱</div>
+        <p>WELCOME TO THE BIRTHDAY WONDERLAND</p>
+        <h1>安怡，欢迎来到<br>你的生日世界 💗</h1>
+        <p>今天的主角是——陈 · 安 · 怡</p>
+        <button class="primary" onclick="findCat()">开始生日冒险 →</button>`;
+    }
+
+    function findCat() {
+      const items = ["🎁", "🌸", "🧸", "🪟", "🪑", "🐱"];
+      app.innerHTML = `
+        <p>LEVEL 01</p><h2>寻找迷路的小猫 🐱</h2>
+        <p id="tip">点击房间里的物品，找到小猫！</p>
+        <div class="grid">
+          ${items.map(x => `<button class="item" onclick="checkCat('${x}')">${x}</button>`).join("")}
+        </div>`;
+    }
+
+    function checkCat(item) {
+      if (item !== "🐱") {
+        document.getElementById("tip").textContent = "不是这里喵～🐾";
+        return;
+      }
+      app.innerHTML += `
+        <p>找到我啦！生日快乐安怡～ 💕</p>
+        <button class="primary" onclick="stars++; updateScore(); heartGame()">获得星星，下一关 →</button>`;
+    }
+
+    function heartGame() {
+      app.innerHTML = `
+        <p>LEVEL 02</p><h2>收集生日爱心 💗</h2>
+        <p>点击完所有爱心即可通关。</p>
+        <div class="heart-area" id="heartArea"></div>`;
+      renderHearts();
+    }
+
+    function renderHearts() {
+      const area = document.getElementById("heartArea");
+      area.innerHTML = Array.from({ length: hearts }, (_, i) =>
+        `<button class="heart" onclick="collectHeart()">💗</button>`
+      ).join("");
+    }
+
+    function collectHeart() {
+      hearts--;
+      if (hearts > 0) return renderHearts();
+
+      app.innerHTML += `
+        <p>安怡收集到了好多好多爱心！</p>
+        <button class="primary" onclick="stars++; updateScore(); quiz()">继续冒险 →</button>`;
+    }
+
+    function quiz() {
+      app.innerHTML = `
+        <p>LEVEL 03</p><h2>生日小问答 💌</h2>
+        <h3>安怡今天最该收到什么？</h3>
+        <div class="answers">
+          <button onclick="gift()">超级大的生日蛋糕</button>
+          <button onclick="gift()">很多很多拥抱</button>
+          <button onclick="gift()">猫咪陪伴</button>
+          <button onclick="gift()">以上全部</button>
+        </div>`;
+    }
+
+    function gift() {
+      stars++;
+      updateScore();
+      app.innerHTML = `
+        <p>LEVEL 04</p><h2>生日礼物房间 🎁</h2>
+        <div class="grid">
+          <button class="item" onclick="alert('愿安怡每天都开心！')">🎁</button>
+          <button class="item" onclick="alert('一个超级大的拥抱！')">🎀</button>
+          <button class="item" onclick="alert('生日快乐，永远可爱！')">💌</button>
+          <button class="item" onclick="gallery()">📸</button>
+        </div>
+        <button class="primary" onclick="gallery()">打开回忆相册 →</button>`;
+    }
+
+    function gallery() {
+      app.innerHTML = `
+        <p>MEMORY ALBUM</p><h2>安怡的回忆相册 📸</h2>
+        <p>把照片放进 images/photo1.jpg 到 images/photo8.jpg。</p>
+        <div class="photos">
+          ${Array.from({ length: 8 }, (_, i) => `
+            <div class="photo">
+              <img src="images/photo${i + 1}.jpg" alt="回忆 ${i + 1}">
+              <p>珍贵回忆 ${i + 1} 💗</p>
+            </div>`).join("")}
+        </div>
+        <button class="primary" onclick="final()">打开最终祝福 →</button>`;
+    }
+
+    function secretRoom() {
+      app.innerHTML = `
+        <div class="cat">🐱🐱🐱</div>
+        <h2>SECRET CAT ROOM</h2>
+        <p>你发现我啦！愿安怡永远被温柔和快乐包围。</p>
+        <button class="primary" onclick="home()">回到首页</button>`;
+    }
+
+    function final() {
+      app.innerHTML = `
+        <div class="cat">🐱</div>
+        <h1>陈安怡<br>生日快乐！✨</h1>
+        <p>愿你新的一岁，有很多很多开心。</p>
+        <p>有喜欢的人和事，有值得期待的明天。</p>
+        <p>也希望每一个普通的日子，都有人认真地爱着你。</p>
+        <button class="primary" onclick="location.reload()">再玩一次 ↻</button>`;
+    }
+
+    home();
+  </script>
+</body>
+</html>
