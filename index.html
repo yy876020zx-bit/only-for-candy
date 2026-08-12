@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 1. 禁用缩放，适配移动端视口与安全区域 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>安怡宝宝 18 - Aurora Wish Edition</title>
     <!-- 引入 Confetti 库 & 图标库 -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -10,7 +11,7 @@
     
     <style>
         :root {
-            --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", sans-serif;
+            --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
             --bg-dark: #030308;
             --card-bg: rgba(22, 22, 23, 0.7);
             --text-main: #ffffff;
@@ -20,7 +21,10 @@
             --border-color: rgba(255, 255, 255, 0.12);
         }
 
-        * { box-sizing: border-box; }
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; /* 清除移动端点击高亮蓝框 */
+        }
         html { scroll-behavior: smooth; }
 
         body {
@@ -48,17 +52,18 @@
 
         .aurora-blob {
             position: absolute;
-            filter: blur(80px);
+            filter: blur(60px); /* 移动端降低 blur 提升性能 */
             opacity: 0.6;
             border-radius: 50%;
+            will-change: transform;
             animation: aurora-flow 20s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
         }
 
         .aurora-1 {
             top: -10%;
             left: -10%;
-            width: 60vw;
-            height: 60vw;
+            width: 80vw;
+            height: 80vw;
             background: radial-gradient(circle, rgba(112, 56, 255, 0.45) 0%, rgba(0, 0, 0, 0) 70%);
             animation-duration: 18s;
         }
@@ -66,8 +71,8 @@
         .aurora-2 {
             top: 20%;
             right: -10%;
-            width: 50vw;
-            height: 50vw;
+            width: 70vw;
+            height: 70vw;
             background: radial-gradient(circle, rgba(224, 130, 157, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
             animation-duration: 22s;
             animation-delay: -5s;
@@ -75,9 +80,9 @@
 
         .aurora-3 {
             bottom: -10%;
-            left: 20%;
-            width: 55vw;
-            height: 55vw;
+            left: 10%;
+            width: 75vw;
+            height: 75vw;
             background: radial-gradient(circle, rgba(0, 180, 216, 0.35) 0%, rgba(0, 0, 0, 0) 70%);
             animation-duration: 25s;
             animation-delay: -10s;
@@ -85,23 +90,25 @@
 
         @keyframes aurora-flow {
             0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            50% { transform: translate(80px, 60px) scale(1.15) rotate(15deg); }
-            100% { transform: translate(-60px, 100px) scale(0.9) rotate(-10deg); }
+            50% { transform: translate(40px, 30px) scale(1.1) rotate(15deg); }
+            100% { transform: translate(-30px, 50px) scale(0.9) rotate(-10deg); }
         }
 
-        /* --- 1. 导航栏 --- */
+        /* --- 1. 导航栏（适配安全区与手机端） --- */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            height: 56px;
-            background: rgba(3, 3, 8, 0.65);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            height: calc(56px + env(safe-area-inset-top));
+            padding-top: env(safe-area-inset-top);
+            background: rgba(3, 3, 8, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 40px;
+            padding-left: 20px;
+            padding-right: 20px;
             z-index: 999;
             border-bottom: 1px solid var(--border-color);
         }
@@ -109,25 +116,20 @@
         .nav-left, .nav-right {
             display: flex;
             align-items: center;
-            gap: 24px;
-            flex: 1;
+            gap: 16px;
         }
 
-        .nav-right { justify-content: flex-end; }
-
         .nav-logo {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             letter-spacing: -0.02em;
-            cursor: pointer;
-            white-space: nowrap;
             color: #ffffff;
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            gap: 24px;
+            gap: 20px;
             padding: 0;
             margin: 0;
         }
@@ -135,11 +137,8 @@
         nav a {
             text-decoration: none;
             color: var(--text-sub);
-            font-size: 12px;
+            font-size: 13px;
             transition: all 0.3s ease;
-            position: relative;
-            padding: 4px 0;
-            white-space: nowrap;
         }
 
         nav a:hover, nav a.active { color: #ffffff; }
@@ -148,75 +147,79 @@
             background: rgba(255, 255, 255, 0.12);
             color: #ffffff;
             border: 1px solid var(--border-color);
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 980px;
-            font-size: 12px;
+            font-size: 13px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
             backdrop-filter: blur(10px);
-        }
-        .nav-btn:hover { 
-            background: #ffffff; 
-            color: #000000;
-            transform: scale(1.04); 
         }
 
         /* --- 2. Hero 展台 --- */
         .container {
             max-width: 1080px;
             margin: 0 auto;
-            padding: 100px 20px 40px 20px;
+            padding: calc(76px + env(safe-area-inset-top)) 16px 40px 16px;
         }
 
         .hero {
             text-align: center;
-            padding: 20px 0;
+            padding: 10px 0 20px 0;
         }
 
         .hero-tag {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--apple-pink);
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             text-shadow: 0 0 10px var(--apple-pink-glow);
         }
 
         .hero-title {
-            font-size: clamp(2.8rem, 6vw, 4.8rem);
+            font-size: clamp(2rem, 8vw, 4.5rem);
             font-weight: 700;
             letter-spacing: -0.03em;
-            margin: 0 0 16px 0;
-            background: linear-gradient(180deg, #FFFFFF 30%, rgba(255,255,255,0.7) 100%);
+            margin: 0 0 12px 0;
+            background: linear-gradient(180deg, #FFFFFF 30%, rgba(255,255,255,0.75) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero-sub {
-            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            font-size: clamp(0.95rem, 3.5vw, 1.3rem);
             color: var(--text-sub);
             max-width: 640px;
-            margin: 0 auto 30px auto;
+            margin: 0 auto 20px auto;
             line-height: 1.4;
+            padding: 0 10px;
         }
+
+        /* 移动端横向可滑动的 Tab 切换器 */
+        .switcher-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE/Edge */
+            padding: 4px 0 16px 0;
+        }
+        .switcher-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
         .apple-switcher {
             display: inline-flex;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(15px);
             padding: 4px;
             border-radius: 980px;
             border: 1px solid var(--border-color);
-            margin-bottom: 30px;
+            white-space: nowrap;
         }
 
         .switch-tab {
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 8px 20px;
+            padding: 8px 16px;
             border-radius: 980px;
             font-size: 13px;
             font-weight: 500;
@@ -228,74 +231,73 @@
             background: #ffffff;
             color: #000000;
             font-weight: 600;
-            box-shadow: 0 4px 20px rgba(255,255,255,0.3);
+            box-shadow: 0 4px 15px rgba(255,255,255,0.25);
         }
 
         .stage-wrapper {
-            perspective: 1000px;
-            margin-bottom: 80px;
+            margin-bottom: 40px;
         }
 
-        /* 📸 主视觉图片：已移除点击交互，纯展示 */
         .stage-card {
             position: relative;
             width: 100%;
-            height: 520px;
-            border-radius: 32px;
+            height: 55vw; /* 响应式高度 */
+            min-height: 320px;
+            max-height: 520px;
+            border-radius: 24px;
             background-size: cover;
             background-position: center;
             transition: background-image 0.5s ease;
             overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.6);
         }
 
-        /* 边缘暗化羽化 */
         .stage-card::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 32px;
-            box-shadow: inset 0 0 35px 8px rgba(3, 3, 8, 0.85);
+            border-radius: 24px;
+            box-shadow: inset 0 0 25px 6px rgba(3, 3, 8, 0.85);
             pointer-events: none;
         }
 
         .stage-card-overlay {
             position: absolute;
-            bottom: 30px; left: 30px;
+            bottom: 16px; left: 16px; right: 16px;
             text-align: left;
-            background: rgba(10, 10, 15, 0.55);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            padding: 16px 24px;
-            border-radius: 20px;
+            background: rgba(10, 10, 15, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 12px 18px;
+            border-radius: 16px;
             border: 1px solid var(--border-color);
             z-index: 2;
         }
 
         .stage-card-overlay span {
-            font-size: 12px;
+            font-size: 10px;
             color: var(--apple-pink);
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
         }
 
-        .stage-card-overlay h4 { margin: 4px 0 0 0; font-size: 1.1rem; font-weight: 500; color: #ffffff; }
+        .stage-card-overlay h4 { margin: 2px 0 0 0; font-size: 1rem; font-weight: 500; color: #ffffff; }
 
         /* --- 3. Keynote 参数 --- */
         .stats-section {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 50px 0;
+            gap: 12px;
+            padding: 30px 0;
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 100px;
+            margin-bottom: 50px;
             text-align: center;
         }
 
         .stat-num {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 6vw, 3.5rem);
             font-weight: 700;
             letter-spacing: -0.02em;
             background: linear-gradient(180deg, #FFFFFF 0%, var(--apple-pink) 100%);
@@ -303,18 +305,18 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .stat-desc { font-size: 0.9rem; color: var(--text-sub); margin-top: 8px; }
+        .stat-desc { font-size: 0.8rem; color: var(--text-sub); margin-top: 4px; }
 
         /* --- 4. Bento Grid --- */
-        .section-header { text-align: center; margin-bottom: 40px; }
-        .section-title { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px 0; color: #ffffff; }
-        .section-sub { color: var(--text-sub); font-size: 1rem; }
+        .section-header { text-align: center; margin-bottom: 24px; }
+        .section-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px 0; color: #ffffff; }
+        .section-sub { color: var(--text-sub); font-size: 0.85rem; }
 
         .bento-container {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            gap: 20px;
-            margin-bottom: 100px;
+            gap: 16px;
+            margin-bottom: 60px;
         }
 
         .bento-box {
@@ -322,48 +324,38 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            border-radius: 28px;
-            padding: 32px;
+            border-radius: 24px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
             overflow: hidden;
-            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
-        }
-
-        .bento-box:hover {
-            border-color: rgba(255, 255, 255, 0.35);
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(112, 56, 255, 0.25);
         }
 
         .col-8 { grid-column: span 8; }
         .col-4 { grid-column: span 4; }
 
-        .box-title { font-size: 1.5rem; font-weight: 600; margin: 0 0 8px 0; color: #ffffff; }
-        .box-p { font-size: 0.95rem; color: var(--text-sub); line-height: 1.5; margin: 0 0 16px 0; }
+        .box-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 6px 0; color: #ffffff; }
+        .box-p { font-size: 0.85rem; color: var(--text-sub); line-height: 1.4; margin: 0 0 12px 0; }
 
         .apple-link {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             color: #ffffff; 
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            transition: opacity 0.2s ease;
         }
-        
-        .bento-box:hover .apple-link { opacity: 0.8; }
 
         .box-img {
             width: 100%;
-            height: 240px;
-            border-radius: 20px;
+            height: 180px;
+            border-radius: 16px;
             background-size: cover;
             background-position: center;
-            margin-top: 16px;
+            margin-top: 12px;
             position: relative;
             mask-image: radial-gradient(circle, rgba(0,0,0,1) 65%, rgba(0,0,0,0.3) 100%);
             -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 65%, rgba(0,0,0,0.3) 100%);
@@ -374,76 +366,75 @@
             background: linear-gradient(180deg, rgba(22, 22, 35, 0.6) 0%, rgba(3, 3, 8, 0.8) 100%);
             backdrop-filter: blur(25px);
             border: 1px solid var(--border-color);
-            border-radius: 32px;
-            padding: 60px 20px;
+            border-radius: 24px;
+            padding: 30px 16px;
             text-align: center;
-            margin-bottom: 80px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 30px rgba(224, 130, 157, 0.08);
+            margin-bottom: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
 
         .apple-input-box {
             display: flex;
+            flex-direction: row;
             max-width: 500px;
-            margin: 24px auto 0 auto;
+            margin: 20px auto 0 auto;
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(15px);
             border: 1px solid var(--border-color);
             border-radius: 980px;
-            padding: 6px;
-            transition: border-color 0.3s;
+            padding: 4px 4px 4px 16px;
         }
 
         .apple-input-box:focus-within {
             border-color: var(--apple-pink);
-            box-shadow: 0 0 20px var(--apple-pink-glow);
+            box-shadow: 0 0 15px var(--apple-pink-glow);
         }
 
         .apple-input {
             flex: 1;
             background: transparent;
             border: none;
-            padding: 0 20px;
+            padding: 0;
             color: #ffffff;
             outline: none;
             font-size: 14px;
+            min-width: 0; /* 防止 input 撑破 flex */
         }
 
         .apple-send-btn {
             background: #ffffff;
             color: #000000;
             border: none;
-            padding: 12px 26px;
+            padding: 10px 18px;
             border-radius: 980px;
+            font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s, color 0.2s;
-        }
-        .apple-send-btn:hover { 
-            transform: scale(1.05); 
-            background: var(--apple-pink); 
-            color: #ffffff; 
+            white-space: nowrap;
         }
 
         .wish-toast {
             position: fixed;
-            bottom: 40px;
+            bottom: calc(20px + env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%) translateY(100px);
-            background: rgba(18, 18, 24, 0.9);
+            background: rgba(18, 18, 24, 0.92);
             backdrop-filter: blur(25px);
             border: 1px solid var(--apple-pink);
-            padding: 14px 28px;
+            padding: 12px 20px;
             border-radius: 980px;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 30px var(--apple-pink-glow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px var(--apple-pink-glow);
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 3000;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            max-width: 90vw;
+            text-align: center;
         }
 
         .wish-toast.show {
@@ -451,65 +442,77 @@
             opacity: 1;
         }
 
-        /* Modal 弹窗 */
+        /* Modal 弹窗（适配手机滚动） */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(30px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 2000;
             opacity: 0;
             transition: opacity 0.3s ease;
+            padding: 20px 16px;
         }
 
         .modal.active { display: flex; opacity: 1; }
 
         .modal-content {
-            background: rgba(25, 25, 28, 0.88);
-            backdrop-filter: blur(25px);
+            background: rgba(25, 25, 28, 0.95);
             border: 1px solid var(--border-color);
-            border-radius: 32px;
-            max-width: 700px;
-            width: 90%;
-            padding: 40px;
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 24px;
             position: relative;
-            transform: translateY(30px);
+            transform: translateY(20px);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
         }
 
         .modal.active .modal-content { transform: translateY(0); }
 
         .modal-close {
             position: absolute;
-            top: 20px; right: 20px;
-            background: rgba(255,255,255,0.1);
+            top: 16px; right: 16px;
+            background: rgba(255,255,255,0.15);
             border: none;
             color: #ffffff;
-            width: 36px; height: 36px;
+            width: 32px; height: 32px;
             border-radius: 50%;
             cursor: pointer;
+            z-index: 10;
         }
 
         .modal-img {
-            width: 100%; height: 360px;
-            border-radius: 24px;
+            width: 100%; 
+            height: 220px;
+            border-radius: 16px;
             background-size: cover;
             background-position: center;
-            margin-bottom: 24px;
-            mask-image: radial-gradient(circle, rgba(0,0,0,1) 70%, rgba(0,0,0,0.4) 100%);
-            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 70%, rgba(0,0,0,0.4) 100%);
+            margin-bottom: 16px;
         }
 
-        footer { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 12px; border-top: 1px solid var(--border-color); }
+        footer { 
+            text-align: center; 
+            padding: 30px 0 calc(30px + env(safe-area-inset-bottom)) 0; 
+            color: var(--text-sub); 
+            font-size: 11px; 
+            border-top: 1px solid var(--border-color); 
+        }
 
+        /* --- 📱 移动端针对性优化媒体查询 --- */
         @media (max-width: 768px) {
+            nav ul { display: none; } /* 移动端隐藏文字导航，保持顶栏清爽 */
             .col-8, .col-4 { grid-column: span 12; }
-            .stats-section { grid-template-columns: 1fr; }
-            nav ul { display: none; }
+            .box-img { height: 160px; }
+            .action-card h2 { font-size: 1.5rem !important; }
+            .action-card p { font-size: 0.85rem !important; }
         }
     </style>
 </head>
@@ -534,7 +537,7 @@
         </div>
 
         <div class="nav-right">
-            <button class="nav-btn" onclick="letItSnow()">❄️</button>
+            <button class="nav-btn" onclick="letItSnow()">❄️ 飘雪</button>
         </div>
     </nav>
 
@@ -543,21 +546,23 @@
         <section id="hero" class="hero">
             <div class="hero-tag">Brand new life ✦ 2026</div>
             <h1 class="hero-title">安怡宝宝，18岁生日快乐</h1>
-            <p class="hero-sub">18的第一章，带着爱与自由，开启属于你的无限可能。</p>
+            <p class="hero-sub">18岁的第一章，带着爱与自由，开启属于你的无限可能。</p>
 
-            <div class="apple-switcher">
-                <button class="switch-tab active" onclick="changeHero('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg', '视角 01 · 馋馋和iPad', this)">主视觉 01</button>
-                <button class="switch-tab" onclick="changeHero('./f038706e97c62dbb645c0c4133de6a_livephoto.jpeg', '视角 02 · 臭臭', this)">日常 02</button>
-                <button class="switch-tab" onclick="changeHero('./IMG_2998.png', '视角 03 · 糕妹', this)">精彩 03</button>
-                <button class="switch-tab" onclick="changeHero('./IMG_3130.jpeg', '视角 04 · 极光', this)">精彩 04</button>
+            <!-- 移动端可滑动 Switcher -->
+            <div class="switcher-wrapper">
+                <div class="apple-switcher">
+                    <button class="switch-tab active" onclick="changeHero('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg', '视角 01 · 馋馋和iPad', this)">主视觉 01</button>
+                    <button class="switch-tab" onclick="changeHero('./f038706e97c62dbb645c0c4133de6a_livephoto.jpeg', '视角 02 · 臭臭', this)">日常 02</button>
+                    <button class="switch-tab" onclick="changeHero('./IMG_2998.png', '视角 03 · 糕妹', this)">精彩 03</button>
+                    <button class="switch-tab" onclick="changeHero('./IMG_3130.jpeg', '视角 04 · 极光', this)">精彩 04</button>
+                </div>
             </div>
 
             <div class="stage-wrapper">
-                <!-- 📸 已移除 onclick 跳转弹窗，纯图像展示 -->
                 <div class="stage-card" id="hero-stage" style="background-image: url('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg');">
                     <div class="stage-card-overlay">
                         <span>Apple Live View</span>
-                        <h4 id="stage-caption">视角 01 · 阳光与笑颜</h4>
+                        <h4 id="stage-caption">视角 01 · 馋馋和iPad</h4>
                     </div>
                 </div>
             </div>
@@ -567,15 +572,15 @@
         <section class="stats-section">
             <div>
                 <div class="stat-num">18</div>
-                <div class="stat-desc">成人礼 · 黄金时代</div>
+                <div class="stat-desc">人生新篇章</div>
             </div>
             <div>
                 <div class="stat-num">100%</div>
-                <div class="stat-desc">满载幸福与温暖</div>
+                <div class="stat-desc">满载幸福</div>
             </div>
             <div>
                 <div class="stat-num">∞</div>
-                <div class="stat-desc">馋馋与爱的无限陪伴</div>
+                <div class="stat-desc">无限陪伴</div>
             </div>
         </section>
 
@@ -583,7 +588,7 @@
         <section id="story">
             <div class="section-header">
                 <h2 class="section-title">相伴故事，精致呈现。</h2>
-                <div class="section-sub">点击卡片唤醒专属故事详情 ➔</div>
+                <div class="section-sub">点击卡片唤醒专属故事细节 ➔</div>
             </div>
 
             <div class="bento-container">
@@ -602,18 +607,18 @@
                         <div class="box-p">捕捉每一次发自内心的笑容。</div>
                         <span class="apple-link">查看详情 <i class="fa-solid fa-chevron-right"></i></span>
                     </div>
-                    <div class="box-img" style="height:200px; background-image: url('./lp_image.jpeg');"></div>
+                    <div class="box-img" style="background-image: url('./lp_image.jpeg');"></div>
                 </div>
             </div>
         </section>
 
         <!-- 🌟 许愿池互动模块 -->
         <section class="action-card" id="interactive">
-            <h2 style="font-size: 2.2rem; margin:0 0 10px 0; color: #ffffff;">✨ 安怡宝宝的 18 岁许愿池</h2>
-            <p style="color:var(--text-sub); font-size: 1rem;">写下你对成年的所有期许，极光会记住你的每一个愿望。</p>
+            <h2 style="font-size: 2rem; margin:0 0 8px 0; color: #ffffff;">✨ 安怡宝宝的 18 岁许愿池</h2>
+            <p style="color:var(--text-sub); font-size: 0.95rem;">写下你对成年的所有期许，极光会记住你的每一个愿望。</p>
             <div class="apple-input-box">
-                <input type="text" id="wish-input" class="apple-input" placeholder="许下你的 18 岁生日愿望..." onkeypress="if(event.key==='Enter') makeWish()">
-                <button class="apple-send-btn" onclick="makeWish()">发送愿望 ✦</button>
+                <input type="text" id="wish-input" class="apple-input" placeholder="许下 18 岁生日愿望..." onkeypress="if(event.key==='Enter') makeWish()">
+                <button class="apple-send-btn" onclick="makeWish()">发送 ✦</button>
             </div>
         </section>
     </div>
@@ -624,14 +629,14 @@
         <span id="toastMsg">愿望已锁定，正在加速实现中 ✨</span>
     </div>
 
-    <!-- Modal 弹出框 (保留故事模块使用) -->
+    <!-- Modal 弹出框 -->
     <div class="modal" id="modal" onclick="closeModal(event)">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-img" id="modal-img"></div>
-            <div style="color: var(--apple-pink); font-size: 12px; font-weight: 600;" id="modal-tag">Tag</div>
-            <div style="font-size: 1.8rem; font-weight: 600; margin: 8px 0; color: #ffffff;" id="modal-title">Title</div>
-            <div style="color: var(--text-sub); line-height: 1.6;" id="modal-body">Body...</div>
+            <div style="color: var(--apple-pink); font-size: 11px; font-weight: 600;" id="modal-tag">Tag</div>
+            <div style="font-size: 1.4rem; font-weight: 600; margin: 6px 0; color: #ffffff;" id="modal-title">Title</div>
+            <div style="color: var(--text-sub); font-size: 0.9rem; line-height: 1.6;" id="modal-body">Body...</div>
         </div>
     </div>
 
@@ -642,7 +647,7 @@
     <script>
         // ❄️ 浪漫雪花特效函数
         function letItSnow() {
-            const duration = 3 * 1000;
+            const duration = 2.5 * 1000;
             const animationEnd = Date.now() + duration;
 
             (function frame() {
@@ -650,17 +655,17 @@
                 if (timeLeft <= 0) return;
 
                 confetti({
-                    particleCount: 3,
+                    particleCount: 2,
                     startVelocity: 0,
-                    ticks: 300,
+                    ticks: 200,
                     origin: {
                         x: Math.random(),
                         y: Math.random() * 0.2 - 0.1
                     },
                     colors: ['#ffffff', '#f1d6e0', '#e0829d'],
                     shapes: ['circle'],
-                    gravity: 0.4,
-                    scalar: 0.8,
+                    gravity: 0.5,
+                    scalar: 0.7,
                     drift: Math.random() - 0.5
                 });
 
@@ -674,6 +679,8 @@
                 letItSnow();
                 showWishToast(`“${input.value}” 已收到！一定会实现的 ❄️`);
                 input.value = '';
+                // 手机端收起软键盘
+                input.blur();
             }
         }
 
@@ -683,7 +690,7 @@
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 4000);
+            }, 3500);
         }
 
         function changeHero(imgUrl, captionText, btn) {
@@ -704,6 +711,8 @@
 
             const modal = document.getElementById('modal');
             modal.classList.add('active');
+            // 防止背景穿透滚动
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal(e) {
@@ -712,6 +721,7 @@
 
         function closeModalDirect() {
             document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         window.addEventListener('DOMContentLoaded', () => {
