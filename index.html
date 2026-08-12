@@ -26,7 +26,7 @@
             color: var(--text-dark);
             overflow-x: hidden;
         }
-            <!-- 1. 背景动态弥散光晕（建议直接放在 <body> 标签下的第一行） -->
+                        <!-- 1. 背景动态弥散光晕（建议直接放在 <body> 标签下的第一行） -->
 <div class="ambient-glow">
     <div class="glow-blob-1"></div>
     <div class="glow-blob-2"></div>
@@ -463,6 +463,95 @@
 @media (max-width: 768px) {
     .bento-col-7, .bento-col-5, .bento-col-12 { grid-column: span 12; }
 }
+     /* ==============================================
+   苹果官网级 - 更多高级感细节样式
+   ============================================== */
+
+/* 1. 顶部微光滚动进度条 (Scroll Progress Bar) */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, #e5a4b5, #d88ea4, #f5c2d0);
+    z-index: 10000;
+    box-shadow: 0 0 10px rgba(229, 164, 181, 0.7);
+    transition: width 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 2. 标题金属流光高光 (Shimmer Text Effect) */
+/* (给需要高光的标题加上 class="shimmer-text" 即可) */
+.shimmer-text {
+    background: linear-gradient(
+        120deg, 
+        #1d1d1f 20%, 
+        #e5a4b5 40%, 
+        #ffffff 50%, 
+        #e5a4b5 60%, 
+        #1d1d1f 80%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 6s infinite linear;
+}
+
+@keyframes textShimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+/* 3. 苹果 TV 风格 3D 磁性卡片容器 */
+/* (给任何卡片加上 class="tilt-card" 即可开启 3D 视角) */
+.tilt-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    will-change: transform;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tilt-card-content {
+    transform: translateZ(20px); /* 让卡片内部文字产生 3D 悬浮深度 */
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 4. 苹果灵动跟随光圈 (Apple Fluid Cursor) */
+.custom-cursor {
+    position: fixed;
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid rgba(229, 164, 181, 0.6);
+    background: rgba(253, 242, 245, 0.25);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(2px);
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                background 0.25s ease, 
+                border-color 0.25s ease;
+}
+
+/* 当鼠标悬停在按钮/可点击元素上时，光圈放大吸附 */
+body:has(a:hover, button:hover, .tilt-card:hover, .game-item:hover) .custom-cursor {
+    width: 48px;
+    height: 48px;
+    background: rgba(229, 164, 181, 0.15);
+    border-color: rgba(216, 142, 164, 0.8);
+}
+
+/* 5. 高高奢拟物微噪点背景蒙版 (消除渐变色彩断层，增加高级纸感/磨砂质感) */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 9998;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
     </style>
         
 </head>
@@ -633,5 +722,65 @@
             overlay.querySelector('button').innerText = "再玩一次";
             overlay.style.display = 'flex';
         }
+             // ==============================================
+// 苹果官网级 - 动态交互脚本
+// ==============================================
+
+// 1. 顶部柔光滚动进度条计算
+window.addEventListener('scroll', function() {
+    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    const progressBar = document.getElementById('scroll-progress');
+    if (progressBar) {
+        progressBar.style.width = scrolled + '%';
+    }
+});
+
+// 2. 苹果灵动光圈指针平滑跟手指/鼠标 (Linear Interpolation)
+let mouseX = 0, mouseY = 0;
+let cursorX = 0, cursorY = 0;
+
+document.addEventListener('mousemove', function(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+function animateCursor() {
+    // 缓动插值算法，产生平滑跟进的灵动质感
+    cursorX += (mouseX - cursorX) * 0.18;
+    cursorY += (mouseY - cursorY) * 0.18;
+
+    const cursor = document.getElementById('custom-cursor');
+    if (cursor) {
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+    }
+    requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// 3. Apple TV 风格 3D 磁性卡片倾斜效果 (3D Tilt Card)
+document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('mousemove', function(e) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left; // 鼠标相对卡片的 X 坐标
+        const y = e.clientY - rect.top;  // 鼠标相对卡片的 Y 坐标
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        // 计算倾斜角度（限制在 -10deg 到 10deg 之间）
+        const rotateX = ((y - centerY) / centerY) * -10;
+        const rotateY = ((x - centerX) / centerX) * 10;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener('mouseleave', function() {
+        // 鼠标离开时自动弹簧归位
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+    });
+});
     </script>
          
