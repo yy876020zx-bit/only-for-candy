@@ -220,108 +220,7 @@
                 height: 250px;
             }
         }
-    </style>
-</head>
-<body>
-
-    <!-- 导航栏 -->
-    <nav>
-        <ul>
-            <li><a href="#home">首页</a></li>
-            <li><a href="#story">相伴故事</a></li>
-            <li><a href="#gallery">温馨瞬间</a></li>
-            <li><a href="#blessings">生日祝福</a></li>
-        </ul>
-    </nav>
-
-    <!-- 首屏区块 -->
-    <header id="home" class="hero">
-        <h1 class="reveal">安怡宝宝，生日快乐</h1>
-        <p class="reveal">新的一岁，满载着爱与温暖</p>
-        <div class="hero-img reveal"></div>
-    </header>
-
-    <!-- 图文区块 1：暹罗猫主题 -->
-    <section id="story" class="section-split">
-        <div class="split-text reveal">
-            <h2>最爱的小猫</h2>
-            <p>馋馋的守护，从你们第一次相遇起，馋馋就一直在注视着你的成长。你们分享时间，分享欢乐，也分享彼此最纯粹的爱意</p>
-        </div>
-        <div class="split-img img-cat reveal"></div>
-    </section>
-
-    <!-- 图文区块 2：宝宝成长 -->
-    <section class="section-split reverse">
-        <div class="split-text reveal">
-            <h2>满分可爱，<br>不止一面</h2>
-            <p>你的每一个微笑、每一次关心，都是生命赠予我的珍贵礼物</p>
-        </div>
-        <div class="split-img img-baby reveal"></div>
-    </section>
-
-    <!-- 照片墙网格 -->
-    <section id="gallery" class="gallery">
-        <h2 class="reveal">the moment</h2>
-        <div class="grid">
-            <div class="grid-item reveal"></div>
-            <div class="grid-item reveal" style="transition-delay: 0.1s;"></div>
-            <div class="grid-item reveal" style="transition-delay: 0.2s;"></div>
-        </div>
-    </section>
-
-    <!-- 底部 -->
-    <footer id="blessings">
-        <p> Candy© 2026 为安怡宝宝专属定制</p>
-        <p>愿你的世界永远充满幸福与小猫的叫声</p>
-    </footer>
-
-    <!-- JS：实现滚动渐显动画 -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const reveals = document.querySelectorAll('.reveal');
-            
-            const revealOptions = {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
-            };
-
-            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target); // 动画只播放一次
-                    }
-                });
-            }, revealOptions);
-
-            reveals.forEach(reveal => {
-                revealOnScroll.observe(reveal);
-            });
-        });
-    </script>
-         <!-- 互动小游戏区块 -->
-    <section id="game" class="game-section">
-        <div class="game-card reveal">
-            <h2>🐾 猫咪与安怡的“小鱼干大作战”</h2>
-            <p class="desc">在 20 秒内快速点击出现的小鱼干与爱心，为安怡和喵喵收集满满的生日祝福！</p>
-            
-            <div class="game-stats">
-                <div>得分: <strong id="game-score">0</strong></div>
-                <div>倒计时: <strong id="game-timer">20</strong>s</div>
-            </div>
-
-            <div id="game-area" class="game-area">
-                <div id="game-overlay" class="game-overlay">
-                    <h3 id="overlay-title">准备好了吗？</h3>
-                    <p id="overlay-desc">点击下方按钮开始游戏，看看你能为安怡获得多少分！</p>
-                    <button class="game-btn" onclick="startGame()">开始游戏</button>
-                </div>
-            </div>
-        </div>
-    </section>
-</body>
-</html>
-            /* 互动小游戏样式 */
+     /* 互动小游戏样式 */
         .game-section {
             padding: 90px 10%;
             background-color: #ffffff;
@@ -439,7 +338,105 @@
             0% { transform: scale(0); }
             100% { transform: scale(1); }
         }
-        // 互动小游戏逻辑
+    </style>
+        
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#story">相伴故事</a></li>
+            <li><a href="#gallery">温馨瞬间</a></li>
+            <li><a href="#blessings">生日祝福</a></li>
+        </ul>
+    </nav>
+
+    <!-- 首屏区块 -->
+    <header id="home" class="hero">
+        <h1 class="reveal">安怡宝宝，生日快乐</h1>
+        <p class="reveal">新的一岁，满载着爱与温暖</p>
+        <div class="hero-img reveal"></div>
+    </header>
+
+    <!-- 图文区块 1：暹罗猫主题 -->
+    <section id="story" class="section-split">
+        <div class="split-text reveal">
+            <h2>最爱的小猫</h2>
+            <p>馋馋的守护，从你们第一次相遇起，馋馋就一直在注视着你的成长。你们分享时间，分享欢乐，也分享彼此最纯粹的爱意</p>
+        </div>
+        <div class="split-img img-cat reveal"></div>
+    </section>
+
+    <!-- 图文区块 2：宝宝成长 -->
+    <section class="section-split reverse">
+        <div class="split-text reveal">
+            <h2>满分可爱，<br>不止一面</h2>
+            <p>你的每一个微笑、每一次关心，都是生命赠予我的珍贵礼物</p>
+        </div>
+        <div class="split-img img-baby reveal"></div>
+    </section>
+
+    <!-- 照片墙网格 -->
+    <section id="gallery" class="gallery">
+        <h2 class="reveal">the moment</h2>
+        <div class="grid">
+            <div class="grid-item reveal"></div>
+            <div class="grid-item reveal" style="transition-delay: 0.1s;"></div>
+            <div class="grid-item reveal" style="transition-delay: 0.2s;"></div>
+        </div>
+    </section>
+        <!-- 互动小游戏区块 -->
+    <section id="game" class="game-section">
+        <div class="game-card reveal">
+            <h2>🐾 猫咪与安怡的“小鱼干大作战”</h2>
+            <p class="desc">在 20 秒内快速点击出现的小鱼干与爱心，为安怡和喵喵收集满满的生日祝福！</p>
+            
+            <div class="game-stats">
+                <div>得分: <strong id="game-score">0</strong></div>
+                <div>倒计时: <strong id="game-timer">20</strong>s</div>
+            </div>
+
+            <div id="game-area" class="game-area">
+                <div id="game-overlay" class="game-overlay">
+                    <h3 id="overlay-title">准备好了吗？</h3>
+                    <p id="overlay-desc">点击下方按钮开始游戏，看看你能为安怡获得多少分！</p>
+                    <button class="game-btn" onclick="startGame()">开始游戏</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 底部 -->
+    <footer id="blessings">
+        <p> Candy© 2026 为安怡宝宝专属定制</p>
+        <p>愿你的世界永远充满幸福与小猫的叫声</p>
+    </footer>
+
+    <!-- JS：实现滚动渐显动画 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // 动画只播放一次
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
+     // 互动小游戏逻辑
         let score = 0;
         let timeLeft = 20;
         let gameTimer = null;
@@ -511,4 +508,5 @@
             overlay.querySelector('button').innerText = "再玩一次";
             overlay.style.display = 'flex';
         }
-             
+    </script>
+         
