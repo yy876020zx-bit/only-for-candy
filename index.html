@@ -321,3 +321,194 @@
     </section>
 </body>
 </html>
+            /* 互动小游戏样式 */
+        .game-section {
+            padding: 90px 10%;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        .game-card {
+            max-width: 680px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(253, 242, 245, 0.9), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(229, 164, 181, 0.35);
+            border-radius: 28px;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(229, 164, 181, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .game-card h2 {
+            font-size: 2.3rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .game-card p.desc {
+            color: var(--text-gray);
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+        }
+
+        .game-stats strong {
+            color: var(--accent-pink);
+            font-size: 1.5rem;
+        }
+
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px dashed rgba(229, 164, 181, 0.5);
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(253, 242, 245, 0.92);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .game-overlay h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #d88ea4;
+        }
+
+        .game-overlay p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .game-btn {
+            background: linear-gradient(135deg, #e5a4b5, #d88ea4);
+            color: white;
+            border: none;
+            padding: 12px 36px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(229, 164, 181, 0.45);
+            transition: all 0.25s ease;
+        }
+
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(229, 164, 181, 0.6);
+        }
+
+        .game-item {
+            position: absolute;
+            font-size: 2.5rem;
+            cursor: pointer;
+            user-select: none;
+            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.1s;
+        }
+
+        .game-item:active {
+            transform: scale(1.3);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        // 互动小游戏逻辑
+        let score = 0;
+        let timeLeft = 20;
+        let gameTimer = null;
+        let spawnInterval = null;
+        const emojis = ['🐟', '💖', '🎂', '🐾', '🐱', '✨'];
+
+        function startGame() {
+            score = 0;
+            timeLeft = 20;
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('game-timer').innerText = timeLeft;
+            document.getElementById('game-overlay').style.display = 'none';
+
+            const area = document.getElementById('game-area');
+            const items = area.querySelectorAll('.game-item');
+            items.forEach(item => item.remove());
+
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('game-timer').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            spawnItem();
+            spawnInterval = setInterval(spawnItem, 600);
+        }
+
+        function spawnItem() {
+            const area = document.getElementById('game-area');
+            if (!area || timeLeft <= 0) return;
+
+            const item = document.createElement('div');
+            item.className = 'game-item';
+            item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+            const x = Math.random() * (area.clientWidth - 50);
+            const y = Math.random() * (area.clientHeight - 50);
+            item.style.left = x + 'px';
+            item.style.top = y + 'px';
+
+            item.onclick = function() {
+                score += 10;
+                document.getElementById('game-score').innerText = score;
+                item.remove();
+            };
+
+            area.appendChild(item);
+
+            setTimeout(() => {
+                if (item.parentNode) {
+                    item.remove();
+                }
+            }, 1500);
+        }
+
+        function endGame() {
+            clearInterval(gameTimer);
+            clearInterval(spawnInterval);
+
+            const overlay = document.getElementById('game-overlay');
+            const title = document.getElementById('overlay-title');
+            const desc = document.getElementById('overlay-desc');
+
+            title.innerText = "🎉 游戏结束！";
+            desc.innerText = `太棒了！你一共获得了 ${score} 分！获得成就：【安怡与喵喵的最佳守护者】！`;
+            
+            overlay.querySelector('button').innerText = "再玩一次";
+            overlay.style.display = 'flex';
+        }
+             
