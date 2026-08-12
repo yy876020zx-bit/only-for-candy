@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安怡的生日派对 - Anyi's Birthday</title>
+    <style>
+        /* 全局样式设定 - 苹果风字体与平滑滚动 */
+        :root {
+            --apple-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            --theme-pink: #fdf2f5;
+            --text-dark: #333333;
+            --text-gray: #86868b;
+            --accent-pink: #e5a4b5;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--apple-font);
+            background-color: var(--theme-pink);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* 苹果风毛玻璃导航栏 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 48px;
+            background: rgba(253, 242, 245, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            border-bottom: 1px solid rgba(229, 164, 181, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-pink);
+        }
+
+        /* 滚动渐显动画类 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 首屏 Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, var(--theme-pink) 100%);
+            padding-top: 50px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 600;
+            letter-spacing: -0.05em;
+            margin: 0;
+            background: linear-gradient(90deg, #d88ea4, #b9768b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 400;
+            color: var(--text-gray);
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+
+        .hero-img {
+            width: 80%;
+            max-width: 800px;
+            height: 400px;
+            border-radius: 30px;
+            background: url('https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80') center/cover;
+            box-shadow: 0 20px 40px rgba(229, 164, 181, 0.2);
+        }
+
+        /* 内容图文区块 (左字右图/右字左图) */
+        .section-split {
+            padding: 120px 10%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+        }
+
+        .section-split.reverse {
+            flex-direction: row-reverse;
+            background-color: #ffffff;
+        }
+
+        .split-text {
+            flex: 1;
+        }
+
+        .split-text h2 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .split-text p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--text-gray);
+        }
+
+        .split-img {
+            flex: 1;
+            height: 500px;
+            border-radius: 20px;
+            background-color: #ffe6ee;
+            background-position: center;
+            background-size: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* 替换为您自己的宝宝和暹罗猫照片 */
+        .img-cat { background-image: url('https://images.unsplash.com/photo-1513245543132-31f507417b26?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); }
+        .img-baby { background-image: url('https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'); }
+
+        /* 画廊网格 */
+        .gallery {
+            padding: 100px 10%;
+            text-align: center;
+            background-color: var(--theme-pink);
+        }
+
+        .gallery h2 {
+            font-size: 3rem;
+            margin-bottom: 60px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .grid-item {
+            height: 350px;
+            border-radius: 20px;
+            background-color: #fff;
+            background-position: center;
+            background-size: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.02);
+        }
+
+        .grid-item:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1620358872589-3221b20f5c1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+        .grid-item:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+        .grid-item:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1522204523234-8729aa6e3d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); }
+
+        /* 页脚 */
+        footer {
+            padding: 40px;
+            text-align: center;
+            background: #ffffff;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .section-split, .section-split.reverse {
+                flex-direction: column;
+                padding: 60px 5%;
+            }
+            .split-img {
+                width: 100%;
+                height: 300px;
+            }
+            .hero-img {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav>
+        <ul>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#story">相伴故事</a></li>
+            <li><a href="#gallery">温馨瞬间</a></li>
+            <li><a href="#blessings">生日祝福</a></li>
+        </ul>
+    </nav>
+
+    <!-- 首屏区块 -->
+    <header id="home" class="hero">
+        <h1 class="reveal">安怡，生日快乐。</h1>
+        <p class="reveal">第一年的奇妙旅程，满载着爱与温柔。</p>
+        <div class="hero-img reveal"></div>
+    </header>
+
+    <!-- 图文区块 1：暹罗猫主题 -->
+    <section id="story" class="section-split">
+        <div class="split-text reveal">
+            <h2>最好的玩伴。</h2>
+            <p>优雅的暹罗，温柔的守护。从安怡出生的第一天起，那双湛蓝的眼睛就一直在注视着她的成长。它们分享阳光，分享玩具，也分享彼此最纯粹的爱意。高级的粉调与温暖的毛绒，构成了家里最美的风景。</p>
+        </div>
+        <div class="split-img img-cat reveal"></div>
+    </section>
+
+    <!-- 图文区块 2：宝宝成长 -->
+    <section class="section-split reverse">
+        <div class="split-text reveal">
+            <h2>满分可爱，<br>不止一面。</h2>
+            <p>每一个微笑、每一次牙牙学语，都是生命赠予的珍贵礼物。粉色的主题不只是颜色，更是我们将世界所有的温柔都捧在手心的期盼。安怡的每一天，都在重新定义心动的含义。</p>
+        </div>
+        <div class="split-img img-baby reveal"></div>
+    </section>
+
+    <!-- 照片墙网格 -->
+    <section id="gallery" class="gallery">
+        <h2 class="reveal">时光相册。</h2>
+        <div class="grid">
+            <div class="grid-item reveal"></div>
+            <div class="grid-item reveal" style="transition-delay: 0.1s;"></div>
+            <div class="grid-item reveal" style="transition-delay: 0.2s;"></div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer id="blessings">
+        <p>Copyright © 2026 为可爱的安怡宝宝专属定制.</p>
+        <p>愿你的世界永远充满粉色的甜蜜与猫咪的呼噜声。</p>
+    </footer>
+
+    <!-- JS：实现滚动渐显动画 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // 动画只播放一次
+                    }
+                });
+            }, revealOptions);
+
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
+    </script>
+</body>
+</html>
