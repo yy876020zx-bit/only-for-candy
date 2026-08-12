@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>安怡宝宝的18岁</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --apple-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
@@ -27,6 +28,33 @@
             color: var(--text-dark);
             overflow-x: hidden;
         }
+        // 全屏盛大礼花函数
+function fireConfetti() {
+    var count = 200;
+    // 配合淡粉色调的主题配色
+    var defaults = {
+        origin: { y: 0.7 },
+        colors: ['#d88ea4', '#ffd1dc', '#ffffff', '#e5a4b5', '#ffb7c5']
+    };
+
+    function fire(particleRatio, opts) {
+        confetti(Object.assign({}, defaults, opts, {
+            particleCount: Math.floor(count * particleRatio)
+        }));
+    }
+
+    // 分层交错发射，营造逼真的爆破视觉
+    fire(0.25, { spread: 26, startVelocity: 55 });
+    fire(0.2,  { spread: 60 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.1,  { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.1,  { spread: 120, startVelocity: 45 });
+}
+
+// 进入页面后自动放礼花
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(fireConfetti, 400); // 延迟 0.4 秒触发，体验更平滑
+});
 
         /* 极简高级毛玻璃导航栏 */
         nav {
