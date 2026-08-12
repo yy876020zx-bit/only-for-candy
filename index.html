@@ -51,6 +51,100 @@
         </div>
     </div>
 </div>
+           <!-- 1. 苹果 3 列式亮点特色网格（建议插在首屏下方，快速充实版面） -->
+<section class="section-container">
+    <div class="feature-grid">
+        <div class="feature-card shine-effect">
+            <div class="feature-icon">🐾</div>
+            <h3>日常治愈系</h3>
+            <p>从晨起的第一声喵呜，到深夜的静静陪伴，充实着家里的每一个温馨角落。</p>
+        </div>
+        <div class="feature-card shine-effect">
+            <div class="feature-icon">☀️</div>
+            <h3>阳光角落角落</h3>
+            <p>最喜欢趴在阳台最温暖的那块地毯上打盹，把日子过得慢条斯理又惬意。</p>
+        </div>
+        <div class="feature-card shine-effect">
+            <div class="feature-icon">🎁</div>
+            <h3>无条件的爱</h3>
+            <p>用纯粹无瑕的眼神注视着安怡的成长，是这个小家里最特别的陪伴者。</p>
+        </div>
+    </div>
+</section>
+
+<!-- 2. Apple Store 风格横向滑动卡片展厅（建议插在相册或游戏区块前） -->
+<section class="section-container">
+    <div class="section-title-box">
+        <h2>精彩瞬间。<span>滑动探索更多</span></h2>
+    </div>
+    <div class="horizontal-scroll-container">
+        <div class="scroll-card shine-effect">
+            <div class="scroll-card-bg" style="background-image: url('./cat1.jpg');"></div>
+            <div class="scroll-card-content">
+                <span class="card-tag">Moment 01</span>
+                <h4>第一次相遇的惊艳</h4>
+            </div>
+        </div>
+        <div class="scroll-card shine-effect">
+            <div class="scroll-card-bg" style="background-image: url('./cat2.jpg');"></div>
+            <div class="scroll-card-content">
+                <span class="card-tag">Moment 02</span>
+                <h4>阳光下的慵懒午后</h4>
+            </div>
+        </div>
+        <div class="scroll-card shine-effect">
+            <div class="scroll-card-bg" style="background-image: url('./cat3.jpg');"></div>
+            <div class="scroll-card-content">
+                <span class="card-tag">Moment 03</span>
+                <h4>悄悄观察世界的小眼神</h4>
+            </div>
+        </div>
+        <div class="scroll-card shine-effect">
+            <div class="scroll-card-bg" style="background-image: url('./cat4.jpg');"></div>
+            <div class="scroll-card-content">
+                <span class="card-tag">Moment 04</span>
+                <h4>同框的治愈瞬间</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. 苹果风格折叠抽屉 Accordion（建议插在页脚上方，增加交互深度） -->
+<section class="section-container">
+    <div class="accordion-wrapper">
+        <h3 class="accordion-main-title">关于安怡与猫咪的小故事</h3>
+        
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <span>喵喵最喜欢的玩具是什么？</span>
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-body">
+                <p>其实相比于昂贵的新玩具，最爱的依然是空纸箱和会沙沙作响的小小纸团，每次都能玩得不亦乐乎！</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <span>安怡宝宝和臭臭的时刻</span>
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-body">
+                <p>踩奶！！！！</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <span>关于18岁生日的特别寄语？</span>
+                <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-body">
+                <p>希望安怡宝宝在未来的每一天里都能无忧无虑，有温暖的阳光，有可爱的猫咪，更有满满的爱随行相伴！</p>
+            </div>
+        </div>
+    </div>
+</section>
 
         /* 苹果风毛玻璃导航栏 */
         nav {
@@ -552,6 +646,177 @@ body::after {
     z-index: 9998;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
+      /* ==============================================
+   画面充实度增强 CSS 模块
+   ============================================== */
+
+/* 1. 苹果极细微米级背景工程网格（告别大面积空白） */
+.apple-grid-pattern {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    background-image: 
+        linear-gradient(rgba(229, 164, 181, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(229, 164, 181, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
+    -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
+}
+
+/* 2. 灵动岛音乐/状态播放器 (Dynamic Island Widget) */
+.dynamic-island-widget {
+    position: fixed;
+    top: 65px;
+    right: 24px;
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 18px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border: 1px solid var(--hairline-border, rgba(229, 164, 181, 0.22));
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.dynamic-island-widget:hover {
+    transform: scale(1.04) translateY(-2px);
+    box-shadow: 0 14px 30px rgba(229, 164, 181, 0.25);
+}
+
+.island-text {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.track-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #1d1d1f;
+}
+
+.track-status {
+    font-size: 0.68rem;
+    color: #86868b;
+}
+
+.sound-wave {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 12px;
+}
+
+.sound-wave span {
+    width: 3px;
+    background: #d88ea4;
+    border-radius: 2px;
+    animation: wave 1s ease-in-out infinite alternate;
+}
+
+.sound-wave span:nth-child(2) { animation-delay: 0.2s; }
+.sound-wave span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes wave {
+    0% { height: 3px; }
+    100% { height: 12px; }
+}
+
+/* 3. 苹果数据核心指标墙 (Metrics Grid) */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--hairline-border, rgba(229, 164, 181, 0.22));
+    border-radius: 24px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(229, 164, 181, 0.22);
+}
+
+.metric-number {
+    display: inline-block;
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #1d1d1f 0%, #d88ea4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.metric-unit {
+    display: inline-block;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #d88ea4;
+    margin-left: 4px;
+}
+
+.metric-label {
+    font-size: 0.95rem;
+    color: #86868b;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+/* 4. 灵动胶囊标签云 (Tag Cloud) */
+.tag-cloud-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.tag-pill {
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--hairline-border, rgba(229, 164, 181, 0.22));
+    border-radius: 30px;
+    font-size: 0.9rem;
+    color: #1d1d1f;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.tag-pill:hover {
+    background: #d88ea4;
+    color: #ffffff;
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(216, 142, 164, 0.35);
+}
+
+@media (max-width: 768px) {
+    .dynamic-island-widget { display: none; } /* 移动端自动隐藏避免挡住顶部 */
+}
     </style>
         
 </head>
@@ -563,7 +828,7 @@ body::after {
             <li><a href="#home">首页</a></li>
             <li><a href="#story">相伴故事</a></li>
             <li><a href="#gallery">温馨瞬间</a></li>
-            <li><a href="#blessings">生日祝福</a></li>
+            <li><a href="#blessings">小游戏</a></li>
         </ul>
     </nav>
 
