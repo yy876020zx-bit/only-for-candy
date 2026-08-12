@@ -698,10 +698,239 @@ body::after {
 @media (max-width: 768px) {
     .dynamic-island-widget { display: none; } /* 移动端自动隐藏避免挡住顶部 */
 }
+     /* ==============================================
+   页面中间区域高奢增效样式
+   ============================================== */
+
+/* 1. 苹果光影引言卡片 (Spotlight Card) */
+.quote-spotlight-card {
+    position: relative;
+    background: #111113; /* 深色卡片在浅色背景中形成极强视觉锚点 */
+    border-radius: 32px;
+    padding: 60px 40px;
+    color: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.spotlight-glow {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(229, 164, 181, 0.35) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.quote-spotlight-card:hover .spotlight-glow {
+    opacity: 1;
+}
+
+.quote-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.quote-tag {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #e5a4b5;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.quote-text {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quote-author {
+    font-size: 0.95rem;
+    color: #86868b;
+    margin: 0;
+}
+
+/* 2. Apple 风格互动切片 (Tabbed Showcase) */
+.tab-showcase-wrapper {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 32px;
+    padding: 40px;
+    border: 1px solid var(--hairline-border, rgba(229, 164, 181, 0.22));
+    backdrop-filter: blur(20px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.03);
+}
+
+.tab-controls {
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 6px;
+    border-radius: 30px;
+    gap: 6px;
+    margin-bottom: 36px;
+}
+
+.tab-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #86868b;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: inherit;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: #1d1d1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tab-content-container {
+    position: relative;
+    min-height: 320px;
+}
+
+.tab-panel {
+    display: none;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-panel.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tab-panel-inner {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    text-align: left;
+}
+
+.tab-text {
+    flex: 1;
+}
+
+.tab-text h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 14px 0;
+    letter-spacing: -0.02em;
+}
+
+.tab-text p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #86868b;
+    margin-bottom: 24px;
+}
+
+.mini-specs {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.mini-specs span {
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    background: rgba(229, 164, 181, 0.12);
+    color: #d88ea4;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.tab-media {
+    flex: 1;
+    height: 300px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.tab-media-bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+@media (max-width: 768px) {
+    .tab-panel-inner {
+        flex-direction: column;
+    }
+    .tab-media {
+        width: 100%;
+        height: 220px;
+    }
+    .quote-spotlight-card {
+        padding: 40px 20px;
+    }
+}
     </style>
         
 </head>
 <body>
+    <!-- 1. 极细背景网格（建议放在 <body> 下第一行，解决整体画面冷清感） -->
+<div class="apple-grid-pattern"></div>
+
+<!-- 2. 灵动岛风格悬浮组件（建议放在 <body> 顶部，常驻右上角） -->
+<div class="dynamic-island-widget">
+    <div style="font-size: 1.2rem;">🎵</div>
+    <div class="island-text">
+        <span class="track-title">Happy Birthday Anyi</span>
+        <span class="track-status">正在播放 · 1st Birthday BGM</span>
+    </div>
+    <div class="sound-wave">
+        <span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 3. 动态数字指标墙（建议插在首屏 Hero 与相册/故事之间，填补大幅空白） -->
+<div class="metrics-grid">
+    <div class="metric-card shine-effect">
+        <div><span class="metric-number" data-target="365">0</span><span class="metric-unit">天</span></div>
+        <div class="metric-label">温馨守护与陪伴</div>
+    </div>
+    <div class="metric-card shine-effect">
+        <div><span class="metric-number" data-target="100">0</span><span class="metric-unit">%</span></div>
+        <div class="metric-label">双向治愈时刻</div>
+    </div>
+    <div class="metric-card shine-effect">
+        <div><span class="metric-number" data-target="999">0</span><span class="metric-unit">+</span></div>
+        <div class="metric-label">珍贵照片记录</div>
+    </div>
+</div>
+
+<!-- 4. 灵动胶囊标签云（可插在任意图文块下方，丰富页面视觉层次） -->
+<div class="tag-cloud-wrapper">
+    <span class="tag-pill">✨ 1岁特别企划</span>
+    <span class="tag-pill">🐾 猫咪守护者</span>
+    <span class="tag-pill">🌸 纯真童年</span>
+    <span class="tag-pill">🎂 2026.08</span>
+    <span class="tag-pill">💙 湛蓝眼眸</span>
+    <span class="tag-pill">🧸 温馨角落</span>
+</div>
 
     <!-- 导航栏 -->
     <nav>
@@ -747,6 +976,87 @@ body::after {
             <div class="grid-item reveal" style="transition-delay: 0.2s;"></div>
         </div>
     </section>
+            <!-- ==================== 页面中间插入区 START ==================== -->
+
+<!-- 1. 苹果高奢光影引言卡片 (Spotlight Quote Card) -->
+<section class="section-container">
+    <div class="quote-spotlight-card shine-effect" id="spotlightCard">
+        <div class="spotlight-glow" id="spotlightGlow"></div>
+        <div class="quote-content">
+            <span class="quote-tag">✨ DAILY MEMORIES</span>
+            <blockquote class="quote-text">
+                “每一个有猫咪沉睡的阳光午后，都是安怡童年里最温柔的微风。”
+            </blockquote>
+            <p class="quote-author">— 记录在 2026 的美好时光</p>
+        </div>
+    </div>
+</section>
+
+<!-- 2. Apple 风格互动切换切片 (Tabbed Showcase) -->
+<section class="section-container">
+    <div class="tab-showcase-wrapper">
+        <div class="tab-controls">
+            <button class="tab-btn active" onclick="switchTab(0)">🐾 初见时刻</button>
+            <button class="tab-btn" onclick="switchTab(1)">🌸 温馨日常</button>
+            <button class="tab-btn" onclick="switchTab(2)">🎂 周年寄语</button>
+        </div>
+
+        <div class="tab-content-container">
+            <!-- 切换内容 1 -->
+            <div class="tab-panel active">
+                <div class="tab-panel-inner">
+                    <div class="tab-text">
+                        <h3>湛蓝眼眸的初次邂逅</h3>
+                        <p>第一次抱起它时，小小的身体里发出咕噜咕噜的声音。那双如海洋般深邃的蓝眼睛，注定了这段跨越物种的温暖陪伴。</p>
+                        <div class="mini-specs">
+                            <span>✨ 初次相遇：第 1 天</span>
+                            <span>💙 眼神契合：100%</span>
+                        </div>
+                    </div>
+                    <div class="tab-media shine-effect">
+                        <div class="tab-media-bg" style="background-image: url('./cat1.jpg');"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 切换内容 2 -->
+            <div class="tab-panel">
+                <div class="tab-panel-inner">
+                    <div class="tab-text">
+                        <h3>地毯上的快乐时光</h3>
+                        <p>无论是拿小鱼干吸引它的注意，还是安静地陪伴在身旁读绘本，每一个普通的午后都被赋予了特别的仪式感。</p>
+                        <div class="mini-specs">
+                            <span>☀️ 阳光日照：3 小时/天</span>
+                            <span>🧸 专属玩具：小鱼干</span>
+                        </div>
+                    </div>
+                    <div class="tab-media shine-effect">
+                        <div class="tab-media-bg" style="background-image: url('./cat3.jpg');"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 切换内容 3 -->
+            <div class="tab-panel">
+                <div class="tab-panel-inner">
+                    <div class="tab-text">
+                        <h3>满载爱意的未来许愿</h3>
+                        <p>一岁的生日只是起点，愿未来的每一年里，安怡都能在健康、无忧与满满的爱中自由成长，探索更广阔的世界。</p>
+                        <div class="mini-specs">
+                            <span>🎂 生日勋章：1st Birthday</span>
+                            <span>💖 爱意指数：∞</span
+                        </div>
+                    </div>
+                    <div class="tab-media shine-effect">
+                        <div class="tab-media-bg" style="background-image: url('./cat5.jpg');"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==================== 页面中间插入区 END ==================== -->
         <!-- 互动小游戏区块 -->
     <section id="game" class="game-section">
         <div class="game-card reveal">
@@ -867,106 +1177,6 @@ body::after {
             
             overlay.querySelector('button').innerText = "再玩一次";
             overlay.style.display = 'flex';
-        }
-             // ==============================================
-// 苹果官网级 - 动态交互脚本
-// ==============================================
-
-// 1. 顶部柔光滚动进度条计算
-window.addEventListener('scroll', function() {
-    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    const progressBar = document.getElementById('scroll-progress');
-    if (progressBar) {
-        progressBar.style.width = scrolled + '%';
-    }
-});
-
-// 2. 苹果灵动光圈指针平滑跟手指/鼠标 (Linear Interpolation)
-let mouseX = 0, mouseY = 0;
-let cursorX = 0, cursorY = 0;
-
-document.addEventListener('mousemove', function(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
-
-function animateCursor() {
-    // 缓动插值算法，产生平滑跟进的灵动质感
-    cursorX += (mouseX - cursorX) * 0.18;
-    cursorY += (mouseY - cursorY) * 0.18;
-
-    const cursor = document.getElementById('custom-cursor');
-    if (cursor) {
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-    }
-    requestAnimationFrame(animateCursor);
-}
-animateCursor();
-
-// 3. Apple TV 风格 3D 磁性卡片倾斜效果 (3D Tilt Card)
-document.querySelectorAll('.tilt-card').forEach(card => {
-    card.addEventListener('mousemove', function(e) {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left; // 鼠标相对卡片的 X 坐标
-        const y = e.clientY - rect.top;  // 鼠标相对卡片的 Y 坐标
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        // 计算倾斜角度（限制在 -10deg 到 10deg 之间）
-        const rotateX = ((y - centerY) / centerY) * -10;
-        const rotateY = ((x - centerX) / centerX) * 10;
-
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-    });
-
-    card.addEventListener('mouseleave', function() {
-        // 鼠标离开时自动弹簧归位
-        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-    });
-});
-     <!-- 1. 极细背景网格（建议放在 <body> 下第一行，解决整体画面冷清感） -->
-<div class="apple-grid-pattern"></div>
-
-<!-- 2. 灵动岛风格悬浮组件（建议放在 <body> 顶部，常驻右上角） -->
-<div class="dynamic-island-widget">
-    <div style="font-size: 1.2rem;">🎵</div>
-    <div class="island-text">
-        <span class="track-title">Happy Birthday Anyi</span>
-        <span class="track-status">正在播放 · 1st Birthday BGM</span>
-    </div>
-    <div class="sound-wave">
-        <span></span><span></span><span></span>
-    </div>
-</div>
-
-<!-- 3. 动态数字指标墙（建议插在首屏 Hero 与相册/故事之间，填补大幅空白） -->
-<div class="metrics-grid">
-    <div class="metric-card shine-effect">
-        <div><span class="metric-number" data-target="365">0</span><span class="metric-unit">天</span></div>
-        <div class="metric-label">温馨守护与陪伴</div>
-    </div>
-    <div class="metric-card shine-effect">
-        <div><span class="metric-number" data-target="100">0</span><span class="metric-unit">%</span></div>
-        <div class="metric-label">双向治愈时刻</div>
-    </div>
-    <div class="metric-card shine-effect">
-        <div><span class="metric-number" data-target="999">0</span><span class="metric-unit">+</span></div>
-        <div class="metric-label">珍贵照片记录</div>
-    </div>
-</div>
-
-<!-- 4. 灵动胶囊标签云（可插在任意图文块下方，丰富页面视觉层次） -->
-<div class="tag-cloud-wrapper">
-    <span class="tag-pill">✨ 18岁特别企划</span>
-    <span class="tag-pill">🐾 猫咪守护者</span>
-    <span class="tag-pill">🌸 纯真童年</span>
-    <span class="tag-pill">🎂 2026.08</span>
-    <span class="tag-pill">💙 湛蓝眼眸</span>
-    <span class="tag-pill">🧸 温馨角落</span>
-</div>
+         }
     </script>
          
