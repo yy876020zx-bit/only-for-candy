@@ -299,5 +299,25 @@
             });
         });
     </script>
+         <!-- 互动小游戏区块 -->
+    <section id="game" class="game-section">
+        <div class="game-card reveal">
+            <h2>🐾 猫咪与安怡的“小鱼干大作战”</h2>
+            <p class="desc">在 20 秒内快速点击出现的小鱼干与爱心，为安怡和喵喵收集满满的生日祝福！</p>
+            
+            <div class="game-stats">
+                <div>得分: <strong id="game-score">0</strong></div>
+                <div>倒计时: <strong id="game-timer">20</strong>s</div>
+            </div>
+
+            <div id="game-area" class="game-area">
+                <div id="game-overlay" class="game-overlay">
+                    <h3 id="overlay-title">准备好了吗？</h3>
+                    <p id="overlay-desc">点击下方按钮开始游戏，看看你能为安怡获得多少分！</p>
+                    <button class="game-btn" onclick="startGame()">开始游戏</button>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 </html>
