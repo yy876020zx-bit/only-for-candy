@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>安怡宝宝 18 - Dynamic Island Edition</title>
+    <title>安怡宝宝 18 - Aurora Edition</title>
     <!-- 引入 Confetti 礼花库 & 图标库 -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,14 +11,13 @@
     <style>
         :root {
             --apple-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", sans-serif;
-            --bg-dark: #000000;
-            --card-bg: #161617;
-            --text-main: #f5f5f7;
-            --text-sub: #86868b;
+            --bg-dark: #030308;
+            --card-bg: rgba(22, 22, 23, 0.75);
+            --text-main: #ffffff; /* 统一主字色为纯白 */
+            --text-sub: #a1a1a6;
             --apple-pink: #e0829d;
-            --apple-blue: #2997ff;
-            --apple-pink-glow: rgba(224, 130, 157, 0.25);
-            --border-color: rgba(255, 255, 255, 0.12);
+            --apple-pink-glow: rgba(224, 130, 157, 0.35);
+            --border-color: rgba(255, 255, 255, 0.15);
         }
 
         * { box-sizing: border-box; }
@@ -32,135 +31,79 @@
             color: var(--text-main);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            position: relative;
         }
 
-        /* --- 1. Apple 灵动岛 (Dynamic Island) --- */
-        .dynamic-island-wrapper {
+        /* --- 🌌 0. 苹果风流光极光背景 (Aurora BG) --- */
+        .aurora-bg {
             position: fixed;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-        }
-
-        .dynamic-island {
-            background: #000000;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 22px;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            height: 36px;
-            min-width: 120px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.05);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
             overflow: hidden;
-            user-select: none;
+            background: #030308;
         }
 
-        /* 灵动岛默认紧凑视图 (Compact) */
-        .di-compact {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            gap: 12px;
-            font-size: 12px;
-            font-weight: 500;
+        .aurora-blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            border-radius: 50%;
+            animation: aurora-flow 20s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
         }
 
-        .di-wave {
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            height: 12px;
+        .aurora-1 {
+            top: -10%;
+            left: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(112, 56, 255, 0.45) 0%, rgba(0, 0, 0, 0) 70%);
+            animation-duration: 18s;
         }
 
-        .di-wave span {
-            width: 2px;
-            background: var(--apple-pink);
-            border-radius: 1px;
-            animation: wave 1s ease-in-out infinite alternate;
+        .aurora-2 {
+            top: 20%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(224, 130, 157, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+            animation-duration: 22s;
+            animation-delay: -5s;
         }
 
-        .di-wave span:nth-child(2) { animation-delay: 0.2s; }
-        .di-wave span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes wave {
-            0% { height: 3px; }
-            100% { height: 12px; }
+        .aurora-3 {
+            bottom: -10%;
+            left: 20%;
+            width: 55vw;
+            height: 55vw;
+            background: radial-gradient(circle, rgba(0, 180, 216, 0.35) 0%, rgba(0, 0, 0, 0) 70%);
+            animation-duration: 25s;
+            animation-delay: -10s;
         }
 
-        /* 灵动岛展开状态 (Expanded) */
-        .dynamic-island.expanded {
-            height: 160px;
-            width: 340px;
-            border-radius: 36px;
-            padding: 20px;
-            align-items: flex-start;
-            flex-direction: column;
-            background: rgba(18, 18, 18, 0.95);
-            backdrop-filter: blur(25px);
-            border-color: rgba(255,255,255,0.25);
+        @keyframes aurora-flow {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            50% {
+                transform: translate(80px, 60px) scale(1.15) rotate(15deg);
+            }
+            100% {
+                transform: translate(-60px, 100px) scale(0.9) rotate(-10deg);
+            }
         }
 
-        .di-expanded-content {
-            display: none;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .dynamic-island.expanded .di-compact { display: none; }
-        .dynamic-island.expanded .di-expanded-content { display: flex; }
-
-        .di-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .di-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: url('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg') center/cover;
-            border: 1px solid var(--border-color);
-        }
-
-        .di-info { flex: 1; }
-        .di-title { font-size: 14px; font-weight: 600; color: #fff; }
-        .di-sub { font-size: 11px; color: var(--apple-pink); margin-top: 2px; }
-
-        .di-controls {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin-top: 10px;
-            color: #fff;
-            font-size: 18px;
-        }
-
-        .di-btn {
-            cursor: pointer;
-            transition: transform 0.2s, color 0.2s;
-        }
-
-        .di-btn:hover { transform: scale(1.2); color: var(--apple-pink); }
-
-        /* --- 2. 苹果极简毛玻璃导航栏 --- */
+        /* --- 1. 苹果极简毛玻璃导航栏（含灵动岛） --- */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            height: 52px;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            height: 56px;
+            background: rgba(3, 3, 8, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -169,17 +112,30 @@
             border-bottom: 1px solid var(--border-color);
         }
 
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex: 1;
+        }
+
+        .nav-right {
+            justify-content: flex-end;
+        }
+
         .nav-logo {
             font-size: 14px;
             font-weight: 600;
             letter-spacing: -0.02em;
             cursor: pointer;
+            white-space: nowrap;
+            color: #ffffff;
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            gap: 28px;
+            gap: 24px;
             padding: 0;
             margin: 0;
         }
@@ -191,23 +147,114 @@
             transition: all 0.3s ease;
             position: relative;
             padding: 4px 0;
+            white-space: nowrap;
         }
 
-        nav a:hover, nav a.active { color: var(--text-main); }
+        nav a:hover, nav a.active { color: #ffffff; }
 
         .nav-btn {
-            background: #0071e3;
-            color: #fff;
-            border: none;
-            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 6px 16px;
             border-radius: 980px;
             font-size: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
+            white-space: nowrap;
+            backdrop-filter: blur(10px);
         }
-        .nav-btn:hover { background: #0077ed; transform: scale(1.04); }
+        .nav-btn:hover { 
+            background: #ffffff; 
+            color: #000000;
+            transform: scale(1.04); 
+        }
 
-        /* --- 3. Hero 展台与交互胶囊 --- */
+        /* --- 2. 居中融入的灵动岛 --- */
+        .dynamic-island-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .dynamic-island {
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            height: 32px;
+            min-width: 150px;
+            cursor: pointer;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            user-select: none;
+            backdrop-filter: blur(15px);
+        }
+
+        .di-compact {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* 灵动岛展开状态 */
+        .dynamic-island.expanded {
+            position: absolute;
+            top: 0;
+            height: 110px;
+            width: 300px;
+            border-radius: 26px;
+            padding: 16px;
+            align-items: flex-start;
+            flex-direction: column;
+            background: rgba(12, 12, 18, 0.92);
+            backdrop-filter: blur(30px);
+            border-color: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(224, 130, 157, 0.2);
+        }
+
+        .di-expanded-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .dynamic-island.expanded .di-compact { display: none; }
+        .dynamic-island.expanded .di-expanded-content { display: flex; }
+
+        .di-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .di-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: url('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg') center/cover;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .di-info { flex: 1; }
+        .di-title { font-size: 13px; font-weight: 600; color: #ffffff; }
+        .di-sub { font-size: 11px; color: var(--apple-pink); margin-top: 4px; line-height: 1.3; }
+
+        /* --- 3. Hero 展台 --- */
         .container {
             max-width: 1080px;
             margin: 0 auto;
@@ -216,7 +263,7 @@
 
         .hero {
             text-align: center;
-            padding: 30px 0 20px 0;
+            padding: 20px 0;
         }
 
         .hero-tag {
@@ -226,6 +273,7 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 12px;
+            text-shadow: 0 0 10px var(--apple-pink-glow);
         }
 
         .hero-title {
@@ -233,7 +281,7 @@
             font-weight: 700;
             letter-spacing: -0.03em;
             margin: 0 0 16px 0;
-            background: linear-gradient(180deg, #FFFFFF 30%, #86868B 100%);
+            background: linear-gradient(180deg, #FFFFFF 30%, rgba(255,255,255,0.7) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -248,7 +296,8 @@
 
         .apple-switcher {
             display: inline-flex;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
             padding: 4px;
             border-radius: 980px;
             border: 1px solid var(--border-color);
@@ -271,7 +320,7 @@
             background: #ffffff;
             color: #000000;
             font-weight: 600;
-            box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+            box-shadow: 0 4px 20px rgba(255,255,255,0.3);
         }
 
         .stage-wrapper {
@@ -287,7 +336,7 @@
             background-size: cover;
             background-position: center;
             border: 1px solid var(--border-color);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 50px var(--apple-pink-glow);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px var(--apple-pink-glow);
             transition: transform 0.1s ease, background-image 0.5s ease;
             cursor: pointer;
             overflow: hidden;
@@ -297,8 +346,8 @@
             position: absolute;
             bottom: 30px; left: 30px;
             text-align: left;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
             padding: 16px 24px;
             border-radius: 20px;
             border: 1px solid var(--border-color);
@@ -312,9 +361,9 @@
             font-weight: 600;
         }
 
-        .stage-card-overlay h4 { margin: 4px 0 0 0; font-size: 1.1rem; font-weight: 500; }
+        .stage-card-overlay h4 { margin: 4px 0 0 0; font-size: 1.1rem; font-weight: 500; color: #ffffff; }
 
-        /* --- 4. Keynote 大数字参数展示 --- */
+        /* --- 4. Keynote 参数 --- */
         .stats-section {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -337,9 +386,9 @@
 
         .stat-desc { font-size: 0.9rem; color: var(--text-sub); margin-top: 8px; }
 
-        /* --- 5. Bento Grid 苹果风格暗黑卡片 --- */
+        /* --- 5. Bento Grid 图文模块 --- */
         .section-header { text-align: center; margin-bottom: 40px; }
-        .section-title { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px 0; }
+        .section-title { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px 0; color: #ffffff; }
         .section-sub { color: var(--text-sub); font-size: 1rem; }
 
         .bento-container {
@@ -351,6 +400,8 @@
 
         .bento-box {
             background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
             border-radius: 26px;
             padding: 32px;
@@ -364,25 +415,30 @@
         }
 
         .bento-box:hover {
-            border-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
             transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(112, 56, 255, 0.25);
         }
 
         .col-8 { grid-column: span 8; }
         .col-4 { grid-column: span 4; }
-        .col-6 { grid-column: span 6; }
 
-        .box-title { font-size: 1.5rem; font-weight: 600; margin: 0 0 8px 0; }
+        .box-title { font-size: 1.5rem; font-weight: 600; margin: 0 0 8px 0; color: #ffffff; }
         .box-p { font-size: 0.95rem; color: var(--text-sub); line-height: 1.5; margin: 0 0 16px 0; }
 
+        /* 将原来的蓝色链接改为白色 */
         .apple-link {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: var(--apple-blue);
+            color: #ffffff; 
             font-size: 14px;
             font-weight: 500;
+            transition: opacity 0.2s ease;
+        }
+        
+        .bento-box:hover .apple-link {
+            opacity: 0.8;
         }
 
         .box-img {
@@ -397,19 +453,22 @@
 
         /* --- 6. 互动祝福区 --- */
         .action-card {
-            background: linear-gradient(180deg, #161617 0%, #000000 100%);
+            background: linear-gradient(180deg, rgba(22, 22, 35, 0.7) 0%, rgba(3, 3, 8, 0.8) 100%);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--border-color);
             border-radius: 30px;
             padding: 60px 20px;
             text-align: center;
             margin-bottom: 80px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
         .apple-input-box {
             display: flex;
             max-width: 480px;
             margin: 24px auto 0 auto;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(15px);
             border: 1px solid var(--border-color);
             border-radius: 980px;
             padding: 6px;
@@ -420,7 +479,7 @@
             background: transparent;
             border: none;
             padding: 0 16px;
-            color: #fff;
+            color: #ffffff;
             outline: none;
             font-size: 14px;
         }
@@ -435,14 +494,14 @@
             cursor: pointer;
             transition: transform 0.2s, background 0.2s;
         }
-        .apple-send-btn:hover { transform: scale(1.05); background: var(--apple-pink); color: #fff; }
+        .apple-send-btn:hover { transform: scale(1.05); background: var(--apple-pink); color: #ffffff; }
 
-        /* Modal 弹出框 */
+        /* Modal 弹窗 */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(25px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(30px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -454,7 +513,8 @@
         .modal.active { display: flex; opacity: 1; }
 
         .modal-content {
-            background: #1d1d1f;
+            background: rgba(29, 29, 31, 0.85);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--border-color);
             border-radius: 28px;
             max-width: 700px;
@@ -463,6 +523,7 @@
             position: relative;
             transform: translateY(30px);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.9);
         }
 
         .modal.active .modal-content { transform: translateY(0); }
@@ -472,7 +533,7 @@
             top: 20px; right: 20px;
             background: rgba(255,255,255,0.1);
             border: none;
-            color: #fff;
+            color: #ffffff;
             width: 36px; height: 36px;
             border-radius: 50%;
             cursor: pointer;
@@ -490,7 +551,7 @@
         footer { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 12px; border-top: 1px solid var(--border-color); }
 
         @media (max-width: 768px) {
-            .col-8, .col-6, .col-4 { grid-column: span 12; }
+            .col-8, .col-4 { grid-column: span 12; }
             .stats-section { grid-template-columns: 1fr; }
             nav ul { display: none; }
         }
@@ -498,55 +559,58 @@
 </head>
 <body>
 
-    <!-- 灵动岛 (Dynamic Island) -->
-    <div class="dynamic-island-wrapper">
-        <div class="dynamic-island" id="dynamicIsland" onclick="toggleIsland()">
-            <!-- 紧凑折叠视图 -->
-            <div class="di-compact">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-cake-candles" style="color: var(--apple-pink);"></i>
-                    <span>Ann's 18th</span>
-                </div>
-                <div class="di-wave">
-                    <span></span><span></span><span></span>
-                </div>
-            </div>
+    <!-- 🌌 动态极光背景图层 -->
+    <div class="aurora-bg">
+        <div class="aurora-blob aurora-1"></div>
+        <div class="aurora-blob aurora-2"></div>
+        <div class="aurora-blob aurora-3"></div>
+    </div>
 
-            <!-- 展开详情视图 -->
-            <div class="di-expanded-content">
-                <div class="di-header">
-                    <div class="di-avatar"></div>
-                    <div class="di-info">
-                        <div class="di-title">安怡宝宝 18岁生日专享</div>
-                        <div class="di-sub" id="diStatus">正在播放 · 生日快乐乐章 🎵</div>
+    <!-- 1. 导航栏 (导航菜单 + 灵动岛) -->
+    <nav>
+        <div class="nav-left">
+            <div class="nav-logo" onclick="scrollToSection('hero')">Ann's 18th Pro</div>
+            <ul>
+                <li><a href="#hero" class="nav-link active">设计概览</a></li>
+                <li><a href="#story" class="nav-link">相伴故事</a></li>
+                <li><a href="#interactive" class="nav-link">祝福互动</a></li>
+            </ul>
+        </div>
+
+        <!-- 居中融入的灵动岛（已完全移除音乐播放器，重构为专属状态与通知岛） -->
+        <div class="dynamic-island-container">
+            <div class="dynamic-island" id="dynamicIsland" onclick="toggleIsland()">
+                <!-- 紧凑视图 -->
+                <div class="di-compact">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-cake-candles" style="color: var(--apple-pink);"></i>
+                        <span style="color: #ffffff;">Ann's 18th</span>
                     </div>
+                    <span style="font-size: 10px; color: var(--apple-pink); background: rgba(224, 130, 157, 0.15); padding: 2px 6px; border-radius: 10px;">PRO MAX</span>
                 </div>
 
-                <div class="di-controls">
-                    <i class="fa-solid fa-backward-step di-btn" onclick="diAction(event, '上一首')"></i>
-                    <i class="fa-solid fa-pause di-btn" onclick="diAction(event, '暂停/播放')"></i>
-                    <i class="fa-solid fa-forward-step di-btn" onclick="diAction(event, '下一首')"></i>
-                    <i class="fa-solid fa-heart di-btn" style="color: var(--apple-pink);" onclick="diAction(event, '点赞')"></i>
+                <!-- 展开视图 -->
+                <div class="di-expanded-content">
+                    <div class="di-header">
+                        <div class="di-avatar"></div>
+                        <div class="di-info">
+                            <div class="di-title">安怡宝宝 18岁成人礼</div>
+                            <div class="di-sub" id="diStatus">✨ 欢迎开启属于你的黄金时代！</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 极简导航栏 -->
-    <nav>
-        <div class="nav-logo" onclick="scrollToSection('hero')">Ann's 18th Pro</div>
-        <ul>
-            <li><a href="#hero" class="nav-link active">设计概览</a></li>
-            <li><a href="#story" class="nav-link">相伴故事</a></li>
-            <li><a href="#interactive" class="nav-link">祝福互动</a></li>
-        </ul>
-        <button class="nav-btn" onclick="fireConfetti()">盛放礼花 🎉</button>
+        <div class="nav-right">
+            <button class="nav-btn" onclick="fireConfetti()">盛放礼花 🎉</button>
+        </div>
     </nav>
 
     <div class="container">
         <!-- Hero 展台 -->
         <section id="hero" class="hero">
-            <div class="hero-tag">Dynamic Island Edition ✦ 2026</div>
+            <div class="hero-tag">Aurora Glow Edition ✦ 2026</div>
             <h1 class="hero-title">安怡宝宝，18岁生日快乐</h1>
             <p class="hero-sub">全新成年的第一章。带着爱与自由，开启属于你的无限可能。</p>
 
@@ -612,7 +676,7 @@
 
         <!-- 互动祝福区 -->
         <section class="action-card" id="interactive">
-            <h2 style="font-size: 2rem; margin:0 0 10px 0;">为安怡宝宝送上独家祝福</h2>
+            <h2 style="font-size: 2rem; margin:0 0 10px 0; color: #ffffff;">为安怡宝宝送上独家祝福</h2>
             <p style="color:var(--text-sub);">写下祝福，灵动岛将实时接收通知</p>
             <div class="apple-input-box">
                 <input type="text" id="wish-input" class="apple-input" placeholder="写下你的生日祝福..." onkeypress="if(event.key==='Enter') sendWish()">
@@ -627,7 +691,7 @@
             <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-img" id="modal-img"></div>
             <div style="color: var(--apple-pink); font-size: 12px; font-weight: 600;" id="modal-tag">Tag</div>
-            <div style="font-size: 1.8rem; font-weight: 600; margin: 8px 0;" id="modal-title">Title</div>
+            <div style="font-size: 1.8rem; font-weight: 600; margin: 8px 0; color: #ffffff;" id="modal-title">Title</div>
             <div style="color: var(--text-sub); line-height: 1.6;" id="modal-body">Body...</div>
         </div>
     </div>
@@ -637,39 +701,29 @@
     </footer>
 
     <script>
-        // 灵动岛开关切换
         function toggleIsland() {
             const di = document.getElementById('dynamicIsland');
             di.classList.toggle('expanded');
         }
 
-        function diAction(event, actionName) {
-            event.stopPropagation(); // 阻止触发展开/收起
-            fireConfetti();
-            document.getElementById('diStatus').innerText = `已响应：${actionName} ❤️`;
-        }
-
-        // 灵动岛通知弹窗
         function triggerIslandNotification(msg) {
             const di = document.getElementById('dynamicIsland');
-            document.getElementById('diStatus').innerText = '收到新祝福：' + msg;
+            document.getElementById('diStatus').innerText = '✉️ ' + msg;
             di.classList.add('expanded');
             setTimeout(() => {
                 di.classList.remove('expanded');
             }, 3500);
         }
 
-        // 发送祝福互动
         function sendWish() {
             const input = document.getElementById('wish-input');
             if (input.value.trim() !== '') {
                 fireConfetti();
-                triggerIslandNotification(input.value);
+                triggerIslandNotification('收到新祝福：' + input.value);
                 input.value = '';
             }
         }
 
-        // 切换 Hero 图片与Tab
         function changeHero(imgUrl, captionText, btn) {
             document.querySelectorAll('.switch-tab').forEach(t => t.classList.remove('active'));
             btn.classList.add('active');
@@ -680,17 +734,15 @@
             fireConfetti();
         }
 
-        // 礼花函数
         function fireConfetti() {
             confetti({
                 particleCount: 120,
                 spread: 70,
                 origin: { y: 0.7 },
-                colors: ['#e0829d', '#ffffff', '#0071e3']
+                colors: ['#e0829d', '#ffffff', '#7038ff']
             });
         }
 
-        // 弹窗逻辑
         function openDetailModal(tag, title, imgUrl, bodyText) {
             document.getElementById('modal-tag').innerText = tag;
             document.getElementById('modal-title').innerText = title;
@@ -699,7 +751,7 @@
 
             const modal = document.getElementById('modal');
             modal.classList.add('active');
-            triggerIslandNotification('展开细节卡片 - ' + title);
+            triggerIslandNotification('查看详情：' + title);
         }
 
         function closeModal(e) {
