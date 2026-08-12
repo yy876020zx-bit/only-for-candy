@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>安怡宝宝的18岁</title>
+    <!-- 引入 Canvas Confetti 礼花库 -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
@@ -28,33 +29,6 @@
             color: var(--text-dark);
             overflow-x: hidden;
         }
-        // 全屏盛大礼花函数
-function fireConfetti() {
-    var count = 200;
-    // 配合淡粉色调的主题配色
-    var defaults = {
-        origin: { y: 0.7 },
-        colors: ['#d88ea4', '#ffd1dc', '#ffffff', '#e5a4b5', '#ffb7c5']
-    };
-
-    function fire(particleRatio, opts) {
-        confetti(Object.assign({}, defaults, opts, {
-            particleCount: Math.floor(count * particleRatio)
-        }));
-    }
-
-    // 分层交错发射，营造逼真的爆破视觉
-    fire(0.25, { spread: 26, startVelocity: 55 });
-    fire(0.2,  { spread: 60 });
-    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-    fire(0.1,  { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-    fire(0.1,  { spread: 120, startVelocity: 45 });
-}
-
-// 进入页面后自动放礼花
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(fireConfetti, 400); // 延迟 0.4 秒触发，体验更平滑
-});
 
         /* 极简高级毛玻璃导航栏 */
         nav {
@@ -66,8 +40,10 @@ window.addEventListener('DOMContentLoaded', () => {
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 0 24px;
+            box-sizing: border-box;
             z-index: 999;
             border-bottom: 1px solid var(--glass-border);
         }
@@ -91,6 +67,23 @@ window.addEventListener('DOMContentLoaded', () => {
 
         nav a:hover {
             color: var(--accent-pink);
+        }
+
+        /* 礼花手动触发按钮 */
+        .confetti-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 5px 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .confetti-btn:hover {
+            background: var(--accent-pink);
+            color: white;
         }
 
         /* 容器排版 */
@@ -242,6 +235,8 @@ window.addEventListener('DOMContentLoaded', () => {
             .bento-col-6 { grid-column: span 12; }
             .gallery-grid { grid-template-columns: repeat(2, 1fr); }
             .hero-img { height: 260px; }
+            nav { justify-content: center; }
+            .confetti-btn { display: none; } /* 移动端隐藏按钮保整洁 */
         }
     </style>
 </head>
@@ -249,11 +244,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
     <!-- 导航栏 -->
     <nav>
+        <div style="width: 70px;"></div> <!-- 保持中间居中的占位 -->
         <ul>
             <li><a href="#home">首页</a></li>
             <li><a href="#story">相伴故事</a></li>
             <li><a href="#gallery">温馨瞬间</a></li>
         </ul>
+        <button class="confetti-btn" onclick="fireConfetti()">放礼花 🎉</button>
     </nav>
 
     <div class="container">
@@ -296,5 +293,51 @@ window.addEventListener('DOMContentLoaded', () => {
         <p>愿你的世界永远充满幸福与小猫的叫声</p>
     </footer>
 
+    <!-- 礼花控制脚本 -->
+    <script>
+        // 极简浪漫的全屏双侧喷发礼花函数
+        function fireConfetti() {
+            var count = 200;
+            var defaults = {
+                origin: { y: 0.7 },
+                colors: ['#d88ea4', '#ffd1dc', '#ffffff', '#e5a4b5', '#ffb7c5']
+            };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
+            }
+
+            // 多层交错发射，营造极佳的盛大视觉体验
+            fire(0.25, {
+                spread: 26,
+                startVelocity: 55,
+            });
+            fire(0.2, {
+                spread: 60,
+            });
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+                scalar: 0.8
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 25,
+                decay: 0.92,
+                scalar: 1.2
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 45,
+            });
+        }
+
+        // 页面加载完毕后自动播放礼花
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(fireConfetti, 400); // 延时 0.4 秒发射，体验更自然
+        });
+    </script>
 </body>
 </html>
