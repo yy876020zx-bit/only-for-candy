@@ -886,6 +886,70 @@ body::after {
     .quote-spotlight-card {
         padding: 40px 20px;
     }
+    /* ==============================================
+   页面中间区域高奢增效样式
+   ============================================== */
+
+/* 1. 苹果光影引言卡片 (Spotlight Card) */
+.quote-spotlight-card {
+    position: relative;
+    background: #111113; /* 深色卡片在浅色背景中形成极强视觉锚点 */
+    border-radius: 32px;
+    padding: 60px 40px;
+    color: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.spotlight-glow {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(229, 164, 181, 0.35) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.quote-spotlight-card:hover .spotlight-glow {
+    opacity: 1;
+}
+
+.quote-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.quote-tag {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #e5a4b5;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.quote-text {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quote-author {
+    font-size: 0.95rem;
+    color: #86868b;
+    margin: 0;
 }
     </style>
         
