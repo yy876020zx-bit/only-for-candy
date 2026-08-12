@@ -19,127 +19,6 @@
         }
 
         body {
-            <!-- 1. 背景动态弥散光晕（建议直接放在 <body> 标签下的第一行） -->
-<div class="ambient-glow">
-    <div class="glow-blob-1"></div>
-    <div class="glow-blob-2"></div>
-</div>
-
-<!-- 2. Apple Bento Box（便当盒）非对称卡片布局（可用于替换原本的画廊网格） -->
-<div class="bento-grid">
-    <!-- 7列宽度大卡片 -->
-    <div class="bento-card bento-col-7 shine-effect">
-        <div class="bento-bg" style="background-image: url('./cat4.jpg');"></div>
-        <div class="bento-info">
-            <h3>纸箱里的奇妙探险</h3>
-            <p>阿比西尼亚与暹罗的同框默契瞬间</p>
-        </div>
-    </div>
-    <!-- 5列宽度小卡片 -->
-    <div class="bento-card bento-col-5 shine-effect">
-        <div class="bento-bg" style="background-image: url('./cat5.jpg');"></div>
-        <div class="bento-info">
-            <h3>温柔摸头杀</h3>
-            <p>指尖触碰到的治愈与信任</p>
-        </div>
-    </div>
-</div>
-           <!-- 1. 苹果 3 列式亮点特色网格（建议插在首屏下方，快速充实版面） -->
-<section class="section-container">
-    <div class="feature-grid">
-        <div class="feature-card shine-effect">
-            <div class="feature-icon">🐾</div>
-            <h3>日常治愈系</h3>
-            <p>从晨起的第一声喵呜，到深夜的静静陪伴，充实着家里的每一个温馨角落。</p>
-        </div>
-        <div class="feature-card shine-effect">
-            <div class="feature-icon">☀️</div>
-            <h3>阳光角落角落</h3>
-            <p>最喜欢趴在阳台最温暖的那块地毯上打盹，把日子过得慢条斯理又惬意。</p>
-        </div>
-        <div class="feature-card shine-effect">
-            <div class="feature-icon">🎁</div>
-            <h3>无条件的爱</h3>
-            <p>用纯粹无瑕的眼神注视着安怡的成长，是这个小家里最特别的陪伴者。</p>
-        </div>
-    </div>
-</section>
-
-<!-- 2. Apple Store 风格横向滑动卡片展厅（建议插在相册或游戏区块前） -->
-<section class="section-container">
-    <div class="section-title-box">
-        <h2>精彩瞬间。<span>滑动探索更多</span></h2>
-    </div>
-    <div class="horizontal-scroll-container">
-        <div class="scroll-card shine-effect">
-            <div class="scroll-card-bg" style="background-image: url('./cat1.jpg');"></div>
-            <div class="scroll-card-content">
-                <span class="card-tag">Moment 01</span>
-                <h4>第一次相遇的惊艳</h4>
-            </div>
-        </div>
-        <div class="scroll-card shine-effect">
-            <div class="scroll-card-bg" style="background-image: url('./cat2.jpg');"></div>
-            <div class="scroll-card-content">
-                <span class="card-tag">Moment 02</span>
-                <h4>阳光下的慵懒午后</h4>
-            </div>
-        </div>
-        <div class="scroll-card shine-effect">
-            <div class="scroll-card-bg" style="background-image: url('./cat3.jpg');"></div>
-            <div class="scroll-card-content">
-                <span class="card-tag">Moment 03</span>
-                <h4>悄悄观察世界的小眼神</h4>
-            </div>
-        </div>
-        <div class="scroll-card shine-effect">
-            <div class="scroll-card-bg" style="background-image: url('./cat4.jpg');"></div>
-            <div class="scroll-card-content">
-                <span class="card-tag">Moment 04</span>
-                <h4>同框的治愈瞬间</h4>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 3. 苹果风格折叠抽屉 Accordion（建议插在页脚上方，增加交互深度） -->
-<section class="section-container">
-    <div class="accordion-wrapper">
-        <h3 class="accordion-main-title">关于安怡与猫咪的小故事</h3>
-        
-        <div class="accordion-item">
-            <button class="accordion-header">
-                <span>喵喵最喜欢的玩具是什么？</span>
-                <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-                <p>其实相比于昂贵的新玩具，最爱的依然是空纸箱和会沙沙作响的小小纸团，每次都能玩得不亦乐乎！</p>
-            </div>
-        </div>
-
-        <div class="accordion-item">
-            <button class="accordion-header">
-                <span>安怡宝宝和臭臭的时刻</span>
-                <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-                <p>踩奶！！！！</p>
-            </div>
-        </div>
-
-        <div class="accordion-item">
-            <button class="accordion-header">
-                <span>关于18岁生日的特别寄语？</span>
-                <span class="accordion-icon">+</span>
-            </button>
-            <div class="accordion-body">
-                <p>希望安怡宝宝在未来的每一天里都能无忧无虑，有温暖的阳光，有可爱的猫咪，更有满满的爱随行相伴！</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
             margin: 0;
             padding: 0;
             font-family: var(--apple-font);
@@ -1049,5 +928,45 @@ document.querySelectorAll('.tilt-card').forEach(card => {
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
     });
 });
+     <!-- 1. 极细背景网格（建议放在 <body> 下第一行，解决整体画面冷清感） -->
+<div class="apple-grid-pattern"></div>
+
+<!-- 2. 灵动岛风格悬浮组件（建议放在 <body> 顶部，常驻右上角） -->
+<div class="dynamic-island-widget">
+    <div style="font-size: 1.2rem;">🎵</div>
+    <div class="island-text">
+        <span class="track-title">Happy Birthday Anyi</span>
+        <span class="track-status">正在播放 · 1st Birthday BGM</span>
+    </div>
+    <div class="sound-wave">
+        <span></span><span></span><span></span>
+    </div>
+</div>
+
+<!-- 3. 动态数字指标墙（建议插在首屏 Hero 与相册/故事之间，填补大幅空白） -->
+<div class="metrics-grid">
+    <div class="metric-card shine-effect">
+        <div><span class="metric-number" data-target="365">0</span><span class="metric-unit">天</span></div>
+        <div class="metric-label">温馨守护与陪伴</div>
+    </div>
+    <div class="metric-card shine-effect">
+        <div><span class="metric-number" data-target="100">0</span><span class="metric-unit">%</span></div>
+        <div class="metric-label">双向治愈时刻</div>
+    </div>
+    <div class="metric-card shine-effect">
+        <div><span class="metric-number" data-target="999">0</span><span class="metric-unit">+</span></div>
+        <div class="metric-label">珍贵照片记录</div>
+    </div>
+</div>
+
+<!-- 4. 灵动胶囊标签云（可插在任意图文块下方，丰富页面视觉层次） -->
+<div class="tag-cloud-wrapper">
+    <span class="tag-pill">✨ 18岁特别企划</span>
+    <span class="tag-pill">🐾 猫咪守护者</span>
+    <span class="tag-pill">🌸 纯真童年</span>
+    <span class="tag-pill">🎂 2026.08</span>
+    <span class="tag-pill">💙 湛蓝眼眸</span>
+    <span class="tag-pill">🧸 温馨角落</span>
+</div>
     </script>
          
