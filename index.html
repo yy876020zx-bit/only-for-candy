@@ -1,445 +1,126 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <!-- 优化移动端 Viewport：禁用用户缩放以提升手势体验，兼容 iPhone 刘海屏 (viewport-fit=cover) -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>安怡宝宝的18岁</title>
-    <style>
-        /* ==============================================
-           1. 全局变量与移动端基础设定
-           ============================================== */
-        :root {
-            --apple-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-            --theme-pink: #fdf2f5;
-            --text-dark: #1d1d1f;
-            --text-gray: #86868b;
-            --accent-pink: #e5a4b5;
-            --accent-pink-dark: #d88ea4;
-            --hairline-border: rgba(229, 164, 181, 0.22);
-            --apple-ease: cubic-bezier(0.16, 1, 0.3, 1);
-            /* 手机安全区域支持 */
-            --safe-area-top: env(safe-area-inset-top, 0px);
-            --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-        }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-text-size-adjust: 100%;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: var(--apple-font);
-            background-color: var(--theme-pink);
-            color: var(--text-dark);
-            overflow-x: hidden;
-            position: relative;
-            /* 消除移动端点击蓝色高亮框 */
-            -webkit-tap-highlight-color: transparent;
-            /* 改善移动端字体渲染 */
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* 极高奢微噪点蒙版 (移动端可降低透明度以节省算力) */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            opacity: 0.015;
-            pointer-events: none;
-            z-index: 9998;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* 苹果极细背景工程网格 */
-        .apple-grid-pattern {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 0;
-            background-image: 
-                linear-gradient(rgba(229, 164, 181, 0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(229, 164, 181, 0.06) 1px, transparent 1px);
-            background-size: 36px 36px;
-            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
-            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
-        }
-
-        /* 滚动进度条 */
-        .scroll-progress {
-            position: fixed;
-            top: 0; left: 0;
-            height: 3px;
-            width: 0%;
-            background: linear-gradient(90deg, #e5a4b5, #d88ea4, #f5c2d0);
-            z-index: 10000;
-            box-shadow: 0 0 8px rgba(229, 164, 181, 0.6);
-            transition: width 0.1s var(--apple-ease);
-        }
-
-        /* Apple 灵动跟随光圈 (仅限 PC 桌面端显示) */
-        .custom-cursor {
-            position: fixed;
-            width: 24px;
-            height: 24px;
-            border: 1.5px solid rgba(229, 164, 181, 0.6);
-            background: rgba(253, 242, 245, 0.25);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99999;
-            transform: translate(-50%, -50%);
-            backdrop-filter: blur(2px);
-            transition: width 0.25s var(--apple-ease), height 0.25s var(--apple-ease), background 0.25s ease, border-color 0.25s ease;
-        }
-
-        /* 触摸屏设备禁用 PC 自定义光圈，防止移动端卡顿或阻挡点击 */
-        @media (pointer: coarse) {
-            .custom-cursor { display: none !important; }
-        }
-
-        /* 点击扩散微粒 */
-        .click-sparkle {
-            position: fixed;
-            pointer-events: none;
-            font-size: 1.2rem;
-            z-index: 9999;
-            animation: sparkleFade 0.8s var(--apple-ease) forwards;
-            will-change: transform, opacity;
-        }
-
-        @keyframes sparkleFade {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) rotate(0deg); }
-            100% { opacity: 0; transform: translate(-50%, -80px) scale(1.3) rotate(35deg); }
-        }
-
-        /* ==============================================
-           2. 导航栏与灵动岛（针对移动端适配）
-           ============================================== */
-        nav {
-            position: fixed;
-            top: 0; width: 100%; 
-            height: calc(48px + var(--safe-area-top));
-            padding-top: var(--safe-area-top);
-            background: rgba(253, 242, 245, 0.82);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex; justify-content: center; align-items: center;
-            z-index: 999;
-            border-bottom: 1px solid var(--hairline-border);
-            box-sizing: border-box;
-        }
-
-        nav ul {
-            list-style: none; display: flex; gap: 20px; padding: 0; margin: 0;
-            width: 100%; justify-content: space-around; max-width: 500px;
-        }
-
-        nav a {
-            text-decoration: none; color: var(--text-dark);
-            font-size: 13px; font-weight: 500; letter-spacing: 0.5px;
-            transition: color 0.3s;
-            padding: 8px 4px;
-        }
-
-        nav a:active { color: var(--accent-pink-dark); }
-
-        /* 灵动岛风格组件：移动端靠右上精简版 */
-        .dynamic-island-widget {
-            position: fixed; 
-            top: calc(56px + var(--safe-area-top)); 
-            right: 12px;
-            background: rgba(29, 29, 31, 0.88);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            display: flex; align-items: center; gap: 8px;
-            z-index: 998;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.12);
-            max-width: 85vw;
-        }
-
-        .island-text { display: flex; flex-direction: column; text-align: left; }
-        .track-title { font-size: 0.75rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
-        .track-status { font-size: 0.6rem; color: #a1a1a6; }
-
-        .sound-wave { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
-        .sound-wave span {
-            width: 2px; background: var(--accent-pink);
-            animation: wave 1.2s ease-in-out infinite alternate;
-        }
-        .sound-wave span:nth-child(2) { animation-delay: 0.2s; }
-        .sound-wave span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes wave {
-            0% { height: 2px; }
-            100% { height: 10px; }
-        }
-
-        /* ==============================================
-           3. 模块区块与滚动动画
-           ============================================== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-            will-change: transform, opacity;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Hero 区块 */
-        .hero {
-            min-height: 90vh;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center;
-            background: linear-gradient(180deg, #ffffff 0%, var(--theme-pink) 100%);
-            padding: calc(70px + var(--safe-area-top)) 20px 40px;
-            box-sizing: border-box;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 7vw, 4.5rem);
-            font-weight: 700; letter-spacing: -0.03em; margin: 0;
-            background: linear-gradient(90deg, #d88ea4, #b9768b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 3.5vw, 1.5rem);
-            font-weight: 400; color: var(--text-gray);
-            margin-top: 12px; margin-bottom: 28px;
-        }
-
-        .hero-img {
-            width: 100%; max-width: 720px; height: 280px;
-            border-radius: 24px;
-            background: url('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg') center/cover;
-            box-shadow: 0 16px 32px rgba(229, 164, 181, 0.22);
-        }
-
-        /* 图文切割区块 */
-        .section-split {
-            padding: 60px 20px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
-            box-sizing: border-box;
-        }
-
-        .section-split.reverse {
-            background-color: #ffffff;
-        }
-
-        .split-text { width: 100%; text-align: left; }
-        .split-text h2 { font-size: 2.1rem; font-weight: 600; margin-top: 0; margin-bottom: 12px; line-height: 1.25; }
-        .split-text p { font-size: 1.05rem; line-height: 1.6; color: var(--text-gray); margin: 0; }
-
-        .split-img {
-            width: 100%; height: 320px; border-radius: 20px;
-            background-color: #ffe6ee; background-position: center; background-size: cover;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-        }
-
-        /* 局部照片绑定 */
-        .img-cat { background-image: url('./image_f5541bcac111f3aa3ec744526eba46bf.jpeg'); }
-        .img-baby { background-image: url('./lp_image.jpeg'); }
-
-        /* 画廊网格 */
-        .gallery { padding: 60px 20px; text-align: center; background-color: var(--theme-pink); }
-        .gallery h2 { font-size: 2.2rem; margin-top: 0; margin-bottom: 36px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-
-        .grid-item {
-            height: 280px; border-radius: 18px;
-            background-color: #fff; background-position: center; background-size: cover;
-            transition: transform 0.3s var(--apple-ease);
-        }
-
-        .grid-item:active {
-            transform: scale(0.98);
-        }
-
-        .grid-item:nth-child(1) { background-image: url('./IMG_2998.png'); }
-        .grid-item:nth-child(2) { background-image: url('./IMG_3130.png'); }
-        .grid-item:nth-child(3) { background-image: url('./IMG_3005.jpeg'); }
-        .grid-item:nth-child(4) { background-image: url('./live_photo_paired_photo_7DC55377-BAE2-46A1-B34E-75E50049056F.jpeg'); }
-
-        /* 引言卡片 */
-        .section-container { padding: 40px 16px; box-sizing: border-box; }
-        .quote-spotlight-card {
-            position: relative; background: #111113;
-            border-radius: 24px; padding: 40px 20px; color: #ffffff;
-            overflow: hidden; box-shadow: 0 16px 40px rgba(0,0,0,0.12);
-            text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-radius: 32px; padding: 50px 30px; color: #ffffff;
+            overflow: hidden; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.18), inset 0 1px 1px rgba(255,255,255,0.2);
+            text-align: center; border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .spotlight-glow {
-            position: absolute; width: 280px; height: 280px;
-            background: radial-gradient(circle, rgba(229, 164, 181, 0.35) 0%, rgba(0,0,0,0) 70%);
+            position: absolute; width: 320px; height: 320px;
+            background: radial-gradient(circle, rgba(232, 165, 184, 0.4) 0%, rgba(0,0,0,0) 70%);
             border-radius: 50%; pointer-events: none;
             transform: translate(-50%, -50%); opacity: 0;
             transition: opacity 0.4s ease;
         }
 
         .quote-content { position: relative; z-index: 2; }
-        .quote-tag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; color: #e5a4b5; display: block; margin-bottom: 14px; }
+        .quote-tag { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; color: var(--accent-pink); display: block; margin-bottom: 16px; text-transform: uppercase; }
         .quote-text {
-            font-size: clamp(1.25rem, 4vw, 1.8rem); font-weight: 500; line-height: 1.5; margin: 0 0 16px 0;
+            font-size: clamp(1.35rem, 4vw, 1.9rem); font-weight: 500; line-height: 1.6; margin: 0 0 20px 0;
             letter-spacing: -0.01em;
-            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #d1d1d6 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .quote-author { font-size: 0.85rem; color: #86868b; margin: 0; }
+        .quote-author { font-size: 0.9rem; color: #8e8e93; margin: 0; font-weight: 400; }
 
-        /* ==============================================
-           4. 互动游戏样式（移动端防误触优化）
-           ============================================== */
-        .game-section { padding: 50px 16px; background-color: #ffffff; text-align: center; box-sizing: border-box; }
-        .game-card {
-            max-width: 600px; margin: 0 auto;
-            background: linear-gradient(135deg, rgba(253, 242, 245, 0.9), rgba(255, 255, 255, 0.95));
-            border: 1px solid rgba(229, 164, 181, 0.35); border-radius: 24px;
-            padding: 24px 16px; box-shadow: 0 12px 28px rgba(229, 164, 181, 0.18);
-            backdrop-filter: blur(10px);
-        }
-
-        .game-card h2 { font-size: 1.7rem; margin-top: 0; margin-bottom: 8px; color: var(--text-dark); }
-        .game-card p.desc { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 16px; }
-        .game-stats { display: flex; justify-content: center; gap: 30px; font-size: 1rem; margin-bottom: 16px; }
-        .game-stats strong { color: var(--accent-pink-dark); font-size: 1.3rem; }
-
-        .game-area {
-            position: relative; width: 100%; height: 320px; background: #fff;
-            border-radius: 18px; overflow: hidden; border: 2px dashed rgba(229, 164, 181, 0.5);
-            user-select: none; -webkit-user-select: none;
-            /* 防止滑动游戏区域时触发移动端页面下拉或滚动 */
-            touch-action: none;
-        }
-
-        .game-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(253, 242, 245, 0.94); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 10; padding: 16px; box-sizing: border-box;
-        }
-
-        .game-overlay h3 { font-size: 1.5rem; margin-bottom: 8px; color: #d88ea4; margin-top: 0; }
-        .game-overlay p { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 20px; max-width: 90%; line-height: 1.4; }
-
-        .game-btn {
-            background: linear-gradient(135deg, #e5a4b5, #d88ea4); color: white; border: none;
-            padding: 12px 32px; font-size: 1rem; font-weight: 600; border-radius: 25px; cursor: pointer;
-            box-shadow: 0 6px 16px rgba(229, 164, 181, 0.4); transition: transform 0.15s;
-        }
-
-        .game-btn:active { transform: scale(0.95); }
-
-        .game-item {
-            position: absolute; font-size: 2.4rem; cursor: pointer; user-select: none;
-            -webkit-user-select: none;
-            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            transition: transform 0.1s;
-            /* 增加移动端有效点击热区，提升点击顺畅度 */
-            padding: 10px;
-            margin: -10px;
-        }
-
-        .game-item:active { transform: scale(1.3); }
-
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
+        /* 页脚 */
         footer {
-            padding: 30px 20px calc(30px + var(--safe-area-bottom)); 
-            text-align: center; background: #ffffff;
-            color: var(--text-gray); font-size: 0.85rem; line-height: 1.5;
+            padding: 40px 20px calc(40px + var(--safe-area-bottom)); 
+            text-align: center; 
+            color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;
+            position: relative; z-index: 1;
+            border-top: 1px solid rgba(229, 164, 181, 0.15);
         }
 
-        /* 桌面大屏布局增强 */
+        /* 桌面屏布局提升 */
         @media (min-width: 769px) {
-            .section-split { flex-direction: row; padding: 100px 10%; gap: 50px; }
-            .section-split.reverse { flex-direction: row-reverse; }
-            .split-text { flex: 1; }
-            .split-img { flex: 1; height: 480px; }
-            .hero-img { height: 380px; }
-            .section-container { padding: 80px 10%; }
-            .quote-spotlight-card { padding: 60px 40px; }
-            .grid-item { height: 340px; }
+            .split-card { flex-direction: row; align-items: center; padding: 48px; }
+            .split-card.reverse { flex-direction: row-reverse; }
+            .split-img { height: 380px; }
+            .hero-img { height: 420px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 动态元素 -->
+    <div class="ambient-bg"></div>
+    <div class="google-grid-pattern"></div>
     <div class="scroll-progress" id="scrollProgress"></div>
-    <div class="custom-cursor" id="customCursor"></div>
-    <div class="apple-grid-pattern"></div>
 
-    <!-- 灵动岛悬浮挂件 -->
-    <div class="dynamic-island-widget">
-        <div style="font-size: 1.1rem;">🎵</div>
+    <!-- 灵动岛挂件：显示阅读/滑动进度 -->
+    <div class="dynamic-island-widget" id="dynamicIsland">
+        <div class="island-icon">✨</div>
         <div class="island-text">
-            <span class="track-title">Happy Birthday Anyi</span>
-            <span class="track-status">正在播放 · 18th BGM</span>
+            <span class="island-label">探索进度</span>
+            <span class="island-val" id="islandProgressVal">0%</span>
         </div>
-        <div class="sound-wave">
-            <span></span><span></span><span></span>
+        <div class="island-progress-bar">
+            <div class="island-progress-fill" id="islandProgressFill"></div>
         </div>
     </div>
 
     <!-- 顶部导航 -->
     <nav>
         <ul>
-            <li><a href="#home">首页</a></li>
+            <li><a href="#home" class="active">首页</a></li>
             <li><a href="#story">故事</a></li>
             <li><a href="#gallery">瞬间</a></li>
-            <li><a href="#game">游戏</a></li>
             <li><a href="#blessings">祝福</a></li>
         </ul>
     </nav>
 
     <!-- 首屏区域 -->
     <header id="home" class="hero">
-        <h1 class="reveal">安怡宝宝，生日快乐</h1>
-        <p class="reveal">新的一岁，满载着爱与温暖</p>
-        <div class="hero-img reveal"></div>
+        <div class="hero-badge reveal">🎂 18th Birthday Special</div>
+        <h1 class="reveal">安怡宝宝，<span>生日快乐</span></h1>
+        <p class="reveal">新的一岁，满载着爱与温暖。愿所有美好如期而至，闪耀岁月的每一帧瞬间。</p>
+        <div class="hero-img-wrapper reveal">
+            <div class="glass-card" style="padding: 12px;">
+                <div class="hero-img"></div>
+            </div>
+        </div>
     </header>
 
     <!-- 图文区块 1 -->
     <section id="story" class="section-split">
-        <div class="split-text reveal">
-            <h2>最爱的小猫</h2>
-            <p>馋馋的守护，从你们第一次相遇起，馋馋就一直在注视着你的成长。你们分享时间，分享欢乐，也分享彼此最纯粹的爱意。</p>
+        <div class="glass-card split-card reveal">
+            <div class="split-text">
+                <h2>最爱的小猫</h2>
+                <p>馋馋的守护，从你们第一次相遇起，馋馋就一直在注视着你的成长。你们分享时间，分享欢乐，也分享彼此最纯粹的爱意。</p>
+            </div>
+            <div class="split-img img-cat"></div>
         </div>
-        <div class="split-img img-cat reveal"></div>
     </section>
 
     <!-- 图文区块 2 -->
-    <section class="section-split reverse">
-        <div class="split-text reveal">
-            <h2>满分可爱，<br>不止一面</h2>
-            <p>你的每一个微笑、每一次关心，都是生命赠予我的珍贵礼物。</p>
+    <section class="section-split">
+        <div class="glass-card split-card reverse reveal">
+            <div class="split-text">
+                <h2>满分可爱，<br>不止一面</h2>
+                <p>你的每一个微笑、每一次关心，都是生命赠予我的珍贵礼物。在这个特别的日子里，记录下关于你的美好与温存。</p>
+            </div>
+            <div class="split-img img-baby"></div>
         </div>
-        <div class="split-img img-baby reveal"></div>
     </section>
 
     <!-- 照片墙画廊 -->
     <section id="gallery" class="gallery">
         <h2 class="reveal">The Moments</h2>
+        <p class="sub reveal">珍藏的每一个精彩瞬间</p>
         <div class="grid">
-            <div class="grid-item reveal"></div>
-            <div class="grid-item reveal" style="transition-delay: 0.1s;"></div>
-            <div class="grid-item reveal" style="transition-delay: 0.2s;"></div>
-            <div class="grid-item reveal" style="transition-delay: 0.3s;"></div>
+            <div class="glass-card grid-item-card reveal">
+                <div class="grid-item"></div>
+            </div>
+            <div class="glass-card grid-item-card reveal" style="transition-delay: 0.1s;">
+                <div class="grid-item"></div>
+            </div>
+            <div class="glass-card grid-item-card reveal" style="transition-delay: 0.2s;">
+                <div class="grid-item"></div>
+            </div>
+            <div class="glass-card grid-item-card reveal" style="transition-delay: 0.3s;">
+                <div class="grid-item"></div>
+            </div>
         </div>
     </section>
 
@@ -457,39 +138,18 @@
         </div>
     </section>
 
-    <!-- 互动游戏区块 -->
-    <section id="game" class="game-section">
-        <div class="game-card reveal">
-            <h2>🐾 捕获爱心与小鱼干</h2>
-            <p class="desc">20 秒内快速点击出现的小鱼干与爱心！</p>
-            
-            <div class="game-stats">
-                <div>得分: <strong id="game-score">0</strong></div>
-                <div>倒计时: <strong id="game-timer">20</strong>s</div>
-            </div>
-
-            <div id="game-area" class="game-area">
-                <div id="game-overlay" class="game-overlay">
-                    <h3 id="overlay-title">准备好了吗？</h3>
-                    <p id="overlay-desc">点击下方按钮开始游戏！</p>
-                    <button class="game-btn" onclick="startGame()">开始游戏</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- 页脚 -->
     <footer id="blessings">
         <p>Candy © 2026 为安怡宝宝专属定制</p>
         <p>愿你的世界永远充满幸福与小猫的叫声</p>
     </footer>
 
-    <!-- JavaScript 脚本模块 -->
+    <!-- JavaScript 脚本 -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // 1. 滚动渐显控制
+            // 1. 滚动渐显 IntersectionObserver
             const reveals = document.querySelectorAll('.reveal');
-            const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -20px 0px" };
+            const revealOptions = { threshold: 0.12, rootMargin: "0px 0px -20px 0px" };
 
             const revealOnScroll = new IntersectionObserver(function(entries, observer) {
                 entries.forEach(entry => {
@@ -502,45 +162,47 @@
 
             reveals.forEach(reveal => revealOnScroll.observe(reveal));
 
-            // 2. 顶部进度条
-            window.addEventListener('scroll', () => {
+            // 2. 顶部进度条与灵动岛进度实时更新
+            const scrollProgress = document.getElementById('scrollProgress');
+            const islandProgressVal = document.getElementById('islandProgressVal');
+            const islandProgressFill = document.getElementById('islandProgressFill');
+
+            const updateProgress = () => {
                 const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
                 const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = (winScroll / height) * 100;
-                document.getElementById('scrollProgress').style.width = scrolled + '%';
-            }, { passive: true });
+                const scrolled = height > 0 ? Math.min(Math.max((winScroll / height) * 100, 0), 100) : 0;
+                const percentText = Math.round(scrolled) + '%';
 
-            // 3. 鼠标与触摸光圈 (自动识别触摸设备)
-            const cursor = document.getElementById('customCursor');
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-            if (!isTouchDevice && cursor) {
-                window.addEventListener('mousemove', (e) => {
-                    cursor.style.left = e.clientX + 'px';
-                    cursor.style.top = e.clientY + 'px';
-                });
-            }
-
-            // 4. 点击微粒特效（适配手机轻触）
-            const handleSparkle = (clientX, clientY) => {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'click-sparkle';
-                sparkle.innerText = ['✨', '💖', '🌸', '🐾'][Math.floor(Math.random() * 4)];
-                sparkle.style.left = clientX + 'px';
-                sparkle.style.top = clientY + 'px';
-                document.body.appendChild(sparkle);
-
-                setTimeout(() => sparkle.remove(), 800);
+                if (scrollProgress) scrollProgress.style.width = scrolled + '%';
+                if (islandProgressVal) islandProgressVal.innerText = percentText;
+                if (islandProgressFill) islandProgressFill.style.width = scrolled + '%';
             };
 
-            window.addEventListener('pointerdown', (e) => {
-                // 仅在主按键或触摸点击时触发微粒
-                if (e.isPrimary) {
-                    handleSparkle(e.clientX, e.clientY);
-                }
-            });
+            window.addEventListener('scroll', updateProgress, { passive: true });
+            updateProgress(); // 初始化
 
-            // 5. 聚光灯卡片动态跟光（兼顾移动端触摸与 PC 鼠标）
+            // 3. 导航高亮联动
+            const navLinks = document.querySelectorAll('nav a');
+            const sections = document.querySelectorAll('header, section, footer');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            }, { passive: true });
+
+            // 4. 聚光灯卡片动态跟光
             const spotlightCard = document.getElementById('spotlightCard');
             const spotlightGlow = document.getElementById('spotlightGlow');
 
@@ -565,76 +227,6 @@
                 spotlightCard.addEventListener('touchend', () => spotlightGlow.style.opacity = '0');
             }
         });
-
-        // 6. 互动游戏逻辑
-        let score = 0;
-        let timeLeft = 20;
-        let gameTimer = null;
-        let spawnInterval = null;
-        const emojis = ['🐟', '💖', '🎂', '🐾', '🐱', '✨'];
-
-        function startGame() {
-            score = 0;
-            timeLeft = 20;
-            document.getElementById('game-score').innerText = score;
-            document.getElementById('game-timer').innerText = timeLeft;
-            document.getElementById('game-overlay').style.display = 'none';
-
-            const area = document.getElementById('game-area');
-            area.querySelectorAll('.game-item').forEach(item => item.remove());
-
-            gameTimer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('game-timer').innerText = timeLeft;
-                if (timeLeft <= 0) endGame();
-            }, 1000);
-
-            spawnItem();
-            spawnInterval = setInterval(spawnItem, 550);
-        }
-
-        function spawnItem() {
-            const area = document.getElementById('game-area');
-            if (!area || timeLeft <= 0) return;
-
-            const item = document.createElement('div');
-            item.className = 'game-item';
-            item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-
-            // 计算安全区域，防止元素越界
-            const x = Math.random() * (area.clientWidth - 60);
-            const y = Math.random() * (area.clientHeight - 60);
-            item.style.left = Math.max(10, x) + 'px';
-            item.style.top = Math.max(10, y) + 'px';
-
-            // 支持触摸屏快速反应
-            const onItemHit = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                score += 10;
-                document.getElementById('game-score').innerText = score;
-                item.remove();
-            };
-
-            item.addEventListener('pointerdown', onItemHit);
-
-            area.appendChild(item);
-
-            setTimeout(() => {
-                if (item.parentNode) item.remove();
-            }, 1400);
-        }
-
-        function endGame() {
-            clearInterval(gameTimer);
-            clearInterval(spawnInterval);
-
-            const overlay = document.getElementById('game-overlay');
-            document.getElementById('overlay-title').innerText = "🎉 游戏结束！";
-            document.getElementById('overlay-desc').innerText = `太棒啦！你一共获得了 ${score} 分！获得成就：【安怡宝宝最棒啦】！`;
-            overlay.querySelector('button').innerText = "再玩一次";
-            overlay.style.display = 'flex';
-        }
     </script>
 </body>
 </html>
