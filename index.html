@@ -1,232 +1,1094 @@
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-radius: 32px; padding: 50px 30px; color: #ffffff;
-            overflow: hidden; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.18), inset 0 1px 1px rgba(255,255,255,0.2);
-            text-align: center; border: 1px solid rgba(255, 255, 255, 0.15);
+          <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安怡宝宝的18岁</title>
+    <style>
+        /* 全局样式设定 - 苹果风字体与平滑滚动 */
+        :root {
+            --apple-font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            --theme-pink: #fdf2f5;
+            --text-dark: #333333;
+            --text-gray: #86868b;
+            --accent-pink: #e5a4b5;
         }
 
-        .spotlight-glow {
-            position: absolute; width: 320px; height: 320px;
-            background: radial-gradient(circle, rgba(232, 165, 184, 0.4) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%; pointer-events: none;
-            transform: translate(-50%, -50%); opacity: 0;
-            transition: opacity 0.4s ease;
+        html {
+            scroll-behavior: smooth;
         }
 
-        .quote-content { position: relative; z-index: 2; }
-        .quote-tag { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; color: var(--accent-pink); display: block; margin-bottom: 16px; text-transform: uppercase; }
-        .quote-text {
-            font-size: clamp(1.35rem, 4vw, 1.9rem); font-weight: 500; line-height: 1.6; margin: 0 0 20px 0;
-            letter-spacing: -0.01em;
-            background: linear-gradient(135deg, #ffffff 0%, #d1d1d6 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--apple-font);
+            background-color: var(--theme-pink);
+            color: var(--text-dark);
+            overflow-x: hidden;
+                     }
+                       
+        /* 苹果风毛玻璃导航栏 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 48px;
+            background: rgba(253, 242, 245, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            border-bottom: 1px solid rgba(229, 164, 181, 0.2);
         }
-        .quote-author { font-size: 0.9rem; color: #8e8e93; margin: 0; font-weight: 400; }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-pink);
+        }
+
+        /* 滚动渐显动画类 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 首屏 Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, var(--theme-pink) 100%);
+            padding-top: 50px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 600;
+            letter-spacing: -0.05em;
+            margin: 0;
+            background: linear-gradient(90deg, #d88ea4, #b9768b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 400;
+            color: var(--text-gray);
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+
+        .hero-img {
+            width: 80%;
+            max-width: 800px;
+            height: 400px;
+            border-radius: 30px;
+            background: url('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg') center/cover;
+            box-shadow: 0 20px 40px rgba(229, 164, 181, 0.2);
+        }
+
+        /* 内容图文区块 (左字右图/右字左图) */
+        .section-split {
+            padding: 120px 10%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+        }
+
+        .section-split.reverse {
+            flex-direction: row-reverse;
+            background-color: #ffffff;
+        }
+
+        .split-text {
+            flex: 1;
+        }
+
+        .split-text h2 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .split-text p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: var(--text-gray);
+        }
+
+        .split-img {
+            flex: 1;
+            height: 500px;
+            border-radius: 20px;
+            background-color: #ffe6ee;
+            background-position: center;
+            background-size: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* 替换为您自己的宝宝和暹罗猫照片 */
+        .img-cat { background-image: url('./image_f5541bcac111f3aa3ec744526eba46bf.jpeg'); }
+        .img-baby { background-image: url('./lp_image.jpeg'); }
+
+        /* 画廊网格 */
+        .gallery {
+            padding: 100px 10%;
+            text-align: center;
+            background-color: var(--theme-pink);
+        }
+
+        .gallery h2 {
+            font-size: 3rem;
+            margin-bottom: 60px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .grid-item {
+            height: 350px;
+            border-radius: 20px;
+            background-color: #fff;
+            background-position: center;
+            background-size: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.02);
+        }
+
+        .grid-item:nth-child(1) { background-image: url('./IMG_2998.png'); }
+        .grid-item:nth-child(2) { background-image: url('./IMG_3130.png'); }
+        .grid-item:nth-child(3) { background-image: url('./IMG_3005.jpeg'); }
+        .grid-item:nth-child(4) { background-image: url('./live_photo_paired_photo_7DC55377-BAE2-46A1-B34E-75E50049056F.jpeg'); }
+
 
         /* 页脚 */
         footer {
-            padding: 40px 20px calc(40px + var(--safe-area-bottom)); 
-            text-align: center; 
-            color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;
-            position: relative; z-index: 1;
-            border-top: 1px solid rgba(229, 164, 181, 0.15);
+            padding: 40px;
+            text-align: center;
+            background: #ffffff;
+            color: var(--text-gray);
+            font-size: 0.9rem;
         }
 
-        /* 桌面屏布局提升 */
-        @media (min-width: 769px) {
-            .split-card { flex-direction: row; align-items: center; padding: 48px; }
-            .split-card.reverse { flex-direction: row-reverse; }
-            .split-img { height: 380px; }
-            .hero-img { height: 420px; }
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .section-split, .section-split.reverse {
+                flex-direction: column;
+                padding: 60px 5%;
+            }
+            .split-img {
+                width: 100%;
+                height: 300px;
+            }
+            .hero-img {
+                height: 250px;
+            }
         }
+     /* 互动小游戏样式 */
+        .game-section {
+            padding: 90px 10%;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        .game-card {
+            max-width: 680px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(253, 242, 245, 0.9), rgba(255, 255, 255, 0.95));
+            border: 1px solid rgba(229, 164, 181, 0.35);
+            border-radius: 28px;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(229, 164, 181, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .game-card h2 {
+            font-size: 2.3rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .game-card p.desc {
+            color: var(--text-gray);
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+        }
+
+        .game-stats strong {
+            color: var(--accent-pink);
+            font-size: 1.5rem;
+        }
+
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px dashed rgba(229, 164, 181, 0.5);
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(253, 242, 245, 0.92);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .game-overlay h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #d88ea4;
+        }
+
+        .game-overlay p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .game-btn {
+            background: linear-gradient(135deg, #e5a4b5, #d88ea4);
+            color: white;
+            border: none;
+            padding: 12px 36px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(229, 164, 181, 0.45);
+            transition: all 0.25s ease;
+        }
+
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(229, 164, 181, 0.6);
+        }
+
+        .game-item {
+            position: absolute;
+            font-size: 2.5rem;
+            cursor: pointer;
+            user-select: none;
+            animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.1s;
+        }
+
+        .game-item:active {
+            transform: scale(1.3);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+          /* ==============================================
+   苹果官网级高级感 CSS 核心模块
+   ============================================== */
+
+/* 1. 全局定义苹果官方 Spring 弹簧曲线 & 细边框 */
+:root {
+    --hairline-border: rgba(229, 164, 181, 0.22);
+    --apple-ease: cubic-bezier(0.16, 1, 0.3, 1); /* 苹果官方物理弹簧动效 */
+}
+
+/* 2. macOS 风格背景弥散柔光 (Ambient Radial Glow) */
+.ambient-glow {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 0; overflow: hidden;
+}
+.glow-blob-1 {
+    position: absolute; top: -10%; right: -10%; width: 50vw; height: 50vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(253, 226, 233, 0.6) 0%, rgba(253, 242, 245, 0) 70%);
+    filter: blur(80px);
+    animation: floatGlow 18s ease-in-out infinite alternate;
+}
+.glow-blob-2 {
+    position: absolute; bottom: 10%; left: -10%; width: 60vw; height: 60vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245, 210, 220, 0.4) 0%, rgba(253, 242, 245, 0) 70%);
+    filter: blur(100px);
+    animation: floatGlow 22s ease-in-out infinite alternate-reverse;
+}
+@keyframes floatGlow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-50px, 60px) scale(1.1); }
+}
+
+/* 3. 苹果玻璃面板划过扫光 (给任意卡片加上 class="shine-effect" 即可启用) */
+.shine-effect { position: relative; overflow: hidden; }
+.shine-effect::after {
+    content: '';
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.25) 50%, transparent 70%);
+    transform: rotate(30deg) translateY(-100%);
+    transition: transform 0.9s var(--apple-ease);
+    pointer-events: none;
+}
+.shine-effect:hover::after {
+    transform: rotate(30deg) translateY(100%);
+}
+
+/* 4. Apple Bento Grid（便当盒网格布局） */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+}
+.bento-card {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.04), 0 0 0 1px var(--hairline-border);
+    transition: transform 0.5s var(--apple-ease), box-shadow 0.5s var(--apple-ease);
+    min-height: 380px;
+}
+.bento-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 50px rgba(229, 164, 181, 0.28);
+}
+.bento-col-7 { grid-column: span 7; }
+.bento-col-5 { grid-column: span 5; }
+.bento-col-12 { grid-column: span 12; }
+
+.bento-bg {
+    width: 100%; height: 100%;
+    background-position: center; background-size: cover;
+    transition: transform 0.8s var(--apple-ease);
+}
+.bento-card:hover .bento-bg { transform: scale(1.04); }
+
+.bento-info {
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    padding: 25px 30px; box-sizing: border-box;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.55) 100%);
+    color: #ffffff; text-align: left;
+    backdrop-filter: blur(4px);
+}
+
+/* 5. 全局微粒动画样式 */
+.click-sparkle {
+    position: fixed; pointer-events: none; font-size: 1.2rem; z-index: 9999;
+    animation: sparkleFade 1s var(--apple-ease) forwards;
+}
+@keyframes sparkleFade {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -100px) scale(1.5) rotate(45deg); }
+}
+
+@media (max-width: 768px) {
+    .bento-col-7, .bento-col-5, .bento-col-12 { grid-column: span 12; }
+}
+     /* ==============================================
+   苹果官网级 - 更多高级感细节样式
+   ============================================== */
+
+/* 1. 顶部微光滚动进度条 (Scroll Progress Bar) */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, #e5a4b5, #d88ea4, #f5c2d0);
+    z-index: 10000;
+    box-shadow: 0 0 10px rgba(229, 164, 181, 0.7);
+    transition: width 0.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 2. 标题金属流光高光 (Shimmer Text Effect) */
+/* (给需要高光的标题加上 class="shimmer-text" 即可) */
+.shimmer-text {
+    background: linear-gradient(
+        120deg, 
+        #1d1d1f 20%, 
+        #e5a4b5 40%, 
+        #ffffff 50%, 
+        #e5a4b5 60%, 
+        #1d1d1f 80%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 6s infinite linear;
+}
+
+@keyframes textShimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+/* 3. 苹果 TV 风格 3D 磁性卡片容器 */
+/* (给任何卡片加上 class="tilt-card" 即可开启 3D 视角) */
+.tilt-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    will-change: transform;
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tilt-card-content {
+    transform: translateZ(20px); /* 让卡片内部文字产生 3D 悬浮深度 */
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 4. 苹果灵动跟随光圈 (Apple Fluid Cursor) */
+.custom-cursor {
+    position: fixed;
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid rgba(229, 164, 181, 0.6);
+    background: rgba(253, 242, 245, 0.25);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(2px);
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                background 0.25s ease, 
+                border-color 0.25s ease;
+}
+
+/* 当鼠标悬停在按钮/可点击元素上时，光圈放大吸附 */
+body:has(a:hover, button:hover, .tilt-card:hover, .game-item:hover) .custom-cursor {
+    width: 48px;
+    height: 48px;
+    background: rgba(229, 164, 181, 0.15);
+    border-color: rgba(216, 142, 164, 0.8);
+}
+
+/* 5. 高高奢拟物微噪点背景蒙版 (消除渐变色彩断层，增加高级纸感/磨砂质感) */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 9998;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+      /* ==============================================
+   画面充实度增强 CSS 模块
+   ============================================== */
+
+/* 1. 苹果极细微米级背景工程网格（告别大面积空白） */
+.apple-grid-pattern {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    background-image: 
+        linear-gradient(rgba(229, 164, 181, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(229, 164, 181, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
+    -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 80%);
+}
+
+/* 3. 苹果数据核心指标墙 (Metrics Grid) */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--hairline-border, rgba(229, 164, 181, 0.22));
+    border-radius: 24px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(229, 164, 181, 0.22);
+}
+
+.metric-number {
+    display: inline-block;
+    font-size: 3.2rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #1d1d1f 0%, #d88ea4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.metric-unit {
+    display: inline-block;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #d88ea4;
+    margin-left: 4px;
+}
+
+.metric-label {
+    font-size: 0.95rem;
+    color: #86868b;
+    margin-top: 6px;
+    font-weight: 500;
+}
+
+/* 4. 灵动胶囊标签云 (Tag Cloud) */
+.tag-cloud-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.tag-pill {
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--hairline-border, rgba(229, 164, 181, 0.22));
+    border-radius: 30px;
+    font-size: 0.9rem;
+    color: #1d1d1f;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.tag-pill:hover {
+    background: #d88ea4;
+    color: #ffffff;
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(216, 142, 164, 0.35);
+}
+
+@media (max-width: 768px) {
+    .dynamic-island-widget { display: none; } /* 移动端自动隐藏避免挡住顶部 */
+}
+     /* ==============================================
+   页面中间区域高奢增效样式
+   ============================================== */
+
+/* 1. 苹果光影引言卡片 (Spotlight Card) */
+.quote-spotlight-card {
+    position: relative;
+    background: #111113; /* 深色卡片在浅色背景中形成极强视觉锚点 */
+    border-radius: 32px;
+    padding: 60px 40px;
+    color: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.spotlight-glow {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(229, 164, 181, 0.35) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.quote-spotlight-card:hover .spotlight-glow {
+    opacity: 1;
+}
+
+.quote-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.quote-tag {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #e5a4b5;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.quote-text {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quote-author {
+    font-size: 0.95rem;
+    color: #86868b;
+    margin: 0;
+}
+
+/* 2. Apple 风格互动切片 (Tabbed Showcase) */
+.tab-showcase-wrapper {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 32px;
+    padding: 40px;
+    border: 1px solid var(--hairline-border, rgba(229, 164, 181, 0.22));
+    backdrop-filter: blur(20px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.03);
+}
+
+.tab-controls {
+    display: inline-flex;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 6px;
+    border-radius: 30px;
+    gap: 6px;
+    margin-bottom: 36px;
+}
+
+.tab-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #86868b;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: inherit;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: #1d1d1f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.tab-content-container {
+    position: relative;
+    min-height: 320px;
+}
+
+.tab-panel {
+    display: none;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-panel.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tab-panel-inner {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    text-align: left;
+}
+
+.tab-text {
+    flex: 1;
+}
+
+.tab-text h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 14px 0;
+    letter-spacing: -0.02em;
+}
+
+.tab-text p {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: #86868b;
+    margin-bottom: 24px;
+}
+
+.mini-specs {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.mini-specs span {
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    background: rgba(229, 164, 181, 0.12);
+    color: #d88ea4;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.tab-media {
+    flex: 1;
+    height: 300px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.tab-media-bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+@media (max-width: 768px) {
+    .tab-panel-inner {
+        flex-direction: column;
+    }
+    .tab-media {
+        width: 100%;
+        height: 220px;
+    }
+    .quote-spotlight-card {
+        padding: 40px 20px;
+    }
+    /* ==============================================
+   页面中间区域高奢增效样式
+   ============================================== */
+
+/* 1. 苹果光影引言卡片 (Spotlight Card) */
+.quote-spotlight-card {
+    position: relative;
+    background: #111113; /* 深色卡片在浅色背景中形成极强视觉锚点 */
+    border-radius: 32px;
+    padding: 60px 40px;
+    color: #ffffff;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.spotlight-glow {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(229, 164, 181, 0.35) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.quote-spotlight-card:hover .spotlight-glow {
+    opacity: 1;
+}
+
+.quote-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.quote-tag {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: #e5a4b5;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.quote-text {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quote-author {
+    font-size: 0.95rem;
+    color: #86868b;
+    margin: 0;
+}
     </style>
+        
 </head>
 <body>
+    <!-- 1. 极细背景网格（建议放在 <body> 下第一行，解决整体画面冷清感） -->
+<div class="apple-grid-pattern"></div>
 
-    <div class="ambient-bg"></div>
-    <div class="google-grid-pattern"></div>
-    <div class="scroll-progress" id="scrollProgress"></div>
-
-    <!-- 灵动岛挂件：显示阅读/滑动进度 -->
-    <div class="dynamic-island-widget" id="dynamicIsland">
-        <div class="island-icon">✨</div>
-        <div class="island-text">
-            <span class="island-label">探索进度</span>
-            <span class="island-val" id="islandProgressVal">0%</span>
-        </div>
-        <div class="island-progress-bar">
-            <div class="island-progress-fill" id="islandProgressFill"></div>
-        </div>
+<!-- 2. 灵动岛风格悬浮组件（建议放在 <body> 顶部，常驻右上角） -->
+<div class="dynamic-island-widget">
+    <div style="font-size: 1.2rem;">🎵</div>
+    <div class="island-text">
+        <span class="track-title">Happy Birthday Anyi</span>
+        <span class="track-status">正在播放 · 1st Birthday BGM</span>
     </div>
+    <div class="sound-wave">
+        <span></span><span></span><span></span>
+    </div>
+</div>
 
-    <!-- 顶部导航 -->
+    <!-- 导航栏 -->
     <nav>
         <ul>
-            <li><a href="#home" class="active">首页</a></li>
-            <li><a href="#story">故事</a></li>
-            <li><a href="#gallery">瞬间</a></li>
-            <li><a href="#blessings">祝福</a></li>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#story">相伴故事</a></li>
+            <li><a href="#gallery">温馨瞬间</a></li>
+            <li><a href="#blessings">小游戏</a></li>
         </ul>
     </nav>
 
-    <!-- 首屏区域 -->
+    <!-- 首屏区块 -->
     <header id="home" class="hero">
-        <div class="hero-badge reveal">🎂 18th Birthday Special</div>
-        <h1 class="reveal">安怡宝宝，<span>生日快乐</span></h1>
-        <p class="reveal">新的一岁，满载着爱与温暖。愿所有美好如期而至，闪耀岁月的每一帧瞬间。</p>
-        <div class="hero-img-wrapper reveal">
-            <div class="glass-card" style="padding: 12px;">
-                <div class="hero-img"></div>
-            </div>
-        </div>
+        <h1 class="reveal">安怡宝宝，生日快乐</h1>
+        <p class="reveal">新的一岁，满载着爱与温暖</p>
+        <div class="hero-img reveal"></div>
     </header>
 
-    <!-- 图文区块 1 -->
+    <!-- 图文区块 1：暹罗猫主题 -->
     <section id="story" class="section-split">
-        <div class="glass-card split-card reveal">
-            <div class="split-text">
-                <h2>最爱的小猫</h2>
-                <p>馋馋的守护，从你们第一次相遇起，馋馋就一直在注视着你的成长。你们分享时间，分享欢乐，也分享彼此最纯粹的爱意。</p>
-            </div>
-            <div class="split-img img-cat"></div>
+        <div class="split-text reveal">
+            <h2>最爱的小猫</h2>
+            <p>馋馋的守护，从你们第一次相遇起，馋馋就一直在注视着你的成长。你们分享时间，分享欢乐，也分享彼此最纯粹的爱意</p>
         </div>
+        <div class="split-img img-cat reveal"></div>
     </section>
 
-    <!-- 图文区块 2 -->
-    <section class="section-split">
-        <div class="glass-card split-card reverse reveal">
-            <div class="split-text">
-                <h2>满分可爱，<br>不止一面</h2>
-                <p>你的每一个微笑、每一次关心，都是生命赠予我的珍贵礼物。在这个特别的日子里，记录下关于你的美好与温存。</p>
-            </div>
-            <div class="split-img img-baby"></div>
+    <!-- 图文区块 2：宝宝成长 -->
+    <section class="section-split reverse">
+        <div class="split-text reveal">
+            <h2>满分可爱，<br>不止一面</h2>
+            <p>你的每一个微笑、每一次关心，都是生命赠予我的珍贵礼物</p>
         </div>
+        <div class="split-img img-baby reveal"></div>
     </section>
 
-    <!-- 照片墙画廊 -->
+    <!-- 照片墙网格 -->
     <section id="gallery" class="gallery">
-        <h2 class="reveal">The Moments</h2>
-        <p class="sub reveal">珍藏的每一个精彩瞬间</p>
+        <h2 class="reveal">the moment</h2>
         <div class="grid">
-            <div class="glass-card grid-item-card reveal">
-                <div class="grid-item"></div>
+            <div class="grid-item reveal"></div>
+            <div class="grid-item reveal" style="transition-delay: 0.1s;"></div>
+            <div class="grid-item reveal" style="transition-delay: 0.2s;"></div>
+        </div>
+    </section>
+            <!-- ==================== 页面中间插入区 START ==================== -->
+
+<!-- 1. 苹果高奢光影引言卡片 (Spotlight Quote Card) -->
+<section class="section-container">
+    <div class="quote-spotlight-card shine-effect" id="spotlightCard">
+        <div class="spotlight-glow" id="spotlightGlow"></div>
+        <div class="quote-content">
+            <span class="quote-tag">✨ DAILY MEMORIES</span>
+            <blockquote class="quote-text">
+                “每一片有安怡宝宝的星空，都无比闪耀”
+            </blockquote>
+            <p class="quote-author">— 记录在 2026 的美好时光</p>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ==================== 页面中间插入区 END ==================== -->
+        <!-- 互动小游戏区块 -->
+    <section id="game" class="game-section">
+        <div class="game-card reveal">
+            <h2>🐾 猫咪与安怡宝宝的小游戏</h2>
+            <p class="desc">在 20 秒内快速点击出现的小鱼干与爱心！</p>
+            
+            <div class="game-stats">
+                <div>得分: <strong id="game-score">0</strong></div>
+                <div>倒计时: <strong id="game-timer">20</strong>s</div>
             </div>
-            <div class="glass-card grid-item-card reveal" style="transition-delay: 0.1s;">
-                <div class="grid-item"></div>
-            </div>
-            <div class="glass-card grid-item-card reveal" style="transition-delay: 0.2s;">
-                <div class="grid-item"></div>
-            </div>
-            <div class="glass-card grid-item-card reveal" style="transition-delay: 0.3s;">
-                <div class="grid-item"></div>
+
+            <div id="game-area" class="game-area">
+                <div id="game-overlay" class="game-overlay">
+                    <h3 id="overlay-title">准备好了吗？</h3>
+                    <p id="overlay-desc">点击下方开始游戏！</p>
+                    <button class="game-btn" onclick="startGame()">开始游戏</button>
+                </div>
             </div>
         </div>
     </section>
-
-    <!-- 光影引言卡片 -->
-    <section class="section-container">
-        <div class="quote-spotlight-card reveal" id="spotlightCard">
-            <div class="spotlight-glow" id="spotlightGlow"></div>
-            <div class="quote-content">
-                <span class="quote-tag">✨ DAILY MEMORIES</span>
-                <blockquote class="quote-text">
-                    “每一片有安怡宝宝的星空，都无比闪耀”
-                </blockquote>
-                <p class="quote-author">— 记录在 2026 的美好时光</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 页脚 -->
+    <!-- 底部 -->
     <footer id="blessings">
-        <p>Candy © 2026 为安怡宝宝专属定制</p>
+        <p> Candy© 2026 为安怡宝宝专属定制</p>
         <p>愿你的世界永远充满幸福与小猫的叫声</p>
     </footer>
 
-    <!-- JavaScript 脚本 -->
+    <!-- JS：实现滚动渐显动画 -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // 1. 滚动渐显 IntersectionObserver
             const reveals = document.querySelectorAll('.reveal');
-            const revealOptions = { threshold: 0.12, rootMargin: "0px 0px -20px 0px" };
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
 
             const revealOnScroll = new IntersectionObserver(function(entries, observer) {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
+                        observer.unobserve(entry.target); // 动画只播放一次
                     }
                 });
             }, revealOptions);
 
-            reveals.forEach(reveal => revealOnScroll.observe(reveal));
+            reveals.forEach(reveal => {
+                revealOnScroll.observe(reveal);
+            });
+        });
+     // 互动小游戏逻辑
+        let score = 0;
+        let timeLeft = 20;
+        let gameTimer = null;
+        let spawnInterval = null;
+        const emojis = ['🐟', '💖', '🎂', '🐾', '🐱', '✨'];
 
-            // 2. 顶部进度条与灵动岛进度实时更新
-            const scrollProgress = document.getElementById('scrollProgress');
-            const islandProgressVal = document.getElementById('islandProgressVal');
-            const islandProgressFill = document.getElementById('islandProgressFill');
+        function startGame() {
+            score = 0;
+            timeLeft = 20;
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('game-timer').innerText = timeLeft;
+            document.getElementById('game-overlay').style.display = 'none';
 
-            const updateProgress = () => {
-                const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                const scrolled = height > 0 ? Math.min(Math.max((winScroll / height) * 100, 0), 100) : 0;
-                const percentText = Math.round(scrolled) + '%';
+            const area = document.getElementById('game-area');
+            const items = area.querySelectorAll('.game-item');
+            items.forEach(item => item.remove());
 
-                if (scrollProgress) scrollProgress.style.width = scrolled + '%';
-                if (islandProgressVal) islandProgressVal.innerText = percentText;
-                if (islandProgressFill) islandProgressFill.style.width = scrolled + '%';
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('game-timer').innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            spawnItem();
+            spawnInterval = setInterval(spawnItem, 600);
+        }
+
+        function spawnItem() {
+            const area = document.getElementById('game-area');
+            if (!area || timeLeft <= 0) return;
+
+            const item = document.createElement('div');
+            item.className = 'game-item';
+            item.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+
+            const x = Math.random() * (area.clientWidth - 50);
+            const y = Math.random() * (area.clientHeight - 50);
+            item.style.left = x + 'px';
+            item.style.top = y + 'px';
+
+            item.onclick = function() {
+                score += 10;
+                document.getElementById('game-score').innerText = score;
+                item.remove();
             };
 
-            window.addEventListener('scroll', updateProgress, { passive: true });
-            updateProgress(); // 初始化
+            area.appendChild(item);
 
-            // 3. 导航高亮联动
-            const navLinks = document.querySelectorAll('nav a');
-            const sections = document.querySelectorAll('header, section, footer');
+            setTimeout(() => {
+                if (item.parentNode) {
+                    item.remove();
+                }
+            }, 1500);
+        }
 
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= (sectionTop - 150)) {
-                        current = section.getAttribute('id');
-                    }
-                });
+        function endGame() {
+            clearInterval(gameTimer);
+            clearInterval(spawnInterval);
 
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === '#' + current) {
-                        link.classList.add('active');
-                    }
-                });
-            }, { passive: true });
+            const overlay = document.getElementById('game-overlay');
+            const title = document.getElementById('overlay-title');
+            const desc = document.getElementById('overlay-desc');
 
-            // 4. 聚光灯卡片动态跟光
-            const spotlightCard = document.getElementById('spotlightCard');
-            const spotlightGlow = document.getElementById('spotlightGlow');
-
-            if (spotlightCard && spotlightGlow) {
-                const updateGlowPos = (clientX, clientY) => {
-                    const rect = spotlightCard.getBoundingClientRect();
-                    const x = clientX - rect.left;
-                    const y = clientY - rect.top;
-                    spotlightGlow.style.left = x + 'px';
-                    spotlightGlow.style.top = y + 'px';
-                    spotlightGlow.style.opacity = '1';
-                };
-
-                spotlightCard.addEventListener('mousemove', (e) => updateGlowPos(e.clientX, e.clientY));
-                spotlightCard.addEventListener('touchmove', (e) => {
-                    if (e.touches.length > 0) {
-                        updateGlowPos(e.touches[0].clientX, e.touches[0].clientY);
-                    }
-                }, { passive: true });
-
-                spotlightCard.addEventListener('mouseleave', () => spotlightGlow.style.opacity = '0');
-                spotlightCard.addEventListener('touchend', () => spotlightGlow.style.opacity = '0');
-            }
-        });
+            title.innerText = "🎉 游戏结束！";
+            desc.innerText = `太棒啦！你一共获得了 ${score} 分！获得成就：【安怡宝宝最棒啦】！`;
+            
+            overlay.querySelector('button').innerText = "再玩一次";
+            overlay.style.display = 'flex';
+         }
     </script>
-</body>
-</html>
+         
