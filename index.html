@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>安怡宝宝 18 - Aurora Wish Edition</title>
-    <!-- 引入 Confetti 礼花库 & 图标库 -->
+    <!-- 引入 Confetti 库 & 图标库 -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -162,7 +162,7 @@
             transform: scale(1.04); 
         }
 
-        /* --- 2. Hero 展台 (优化图片边缘融合) --- */
+        /* --- 2. Hero 展台 --- */
         .container {
             max-width: 1080px;
             margin: 0 auto;
@@ -236,7 +236,7 @@
             margin-bottom: 80px;
         }
 
-        /* 📸 主视觉图片：羽化柔和边缘处理 */
+        /* 📸 主视觉图片：已移除点击交互，纯展示 */
         .stage-card {
             position: relative;
             width: 100%;
@@ -244,14 +244,12 @@
             border-radius: 32px;
             background-size: cover;
             background-position: center;
-            transition: transform 0.3s ease, background-image 0.5s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+            transition: background-image 0.5s ease;
             overflow: hidden;
-            /* 边缘阴影与渐变漫反射，完美融入极光背景 */
             box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.6);
         }
 
-        /* 边缘暗化羽化，消除生硬割裂感 */
+        /* 边缘暗化羽化 */
         .stage-card::after {
             content: '';
             position: absolute;
@@ -259,11 +257,6 @@
             border-radius: 32px;
             box-shadow: inset 0 0 35px 8px rgba(3, 3, 8, 0.85);
             pointer-events: none;
-        }
-
-        .stage-card:hover {
-            transform: scale(1.01);
-            box-shadow: 0 35px 90px rgba(0,0,0,0.9), 0 0 50px var(--apple-pink-glow);
         }
 
         .stage-card-overlay {
@@ -312,7 +305,7 @@
 
         .stat-desc { font-size: 0.9rem; color: var(--text-sub); margin-top: 8px; }
 
-        /* --- 4. Bento Grid (图片边缘柔化) --- */
+        /* --- 4. Bento Grid --- */
         .section-header { text-align: center; margin-bottom: 40px; }
         .section-title { font-size: 2.2rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 8px 0; color: #ffffff; }
         .section-sub { color: var(--text-sub); font-size: 1rem; }
@@ -364,7 +357,6 @@
         
         .bento-box:hover .apple-link { opacity: 0.8; }
 
-        /* 📸 Bento 卡片图片：自然柔和边缘 */
         .box-img {
             width: 100%;
             height: 240px;
@@ -373,7 +365,6 @@
             background-position: center;
             margin-top: 16px;
             position: relative;
-            /* 边缘淡出渐变遮罩 */
             mask-image: radial-gradient(circle, rgba(0,0,0,1) 65%, rgba(0,0,0,0.3) 100%);
             -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 65%, rgba(0,0,0,0.3) 100%);
         }
@@ -433,7 +424,6 @@
             color: #ffffff; 
         }
 
-        /* 许愿确认卡片浮层（取代原本的灵动岛弹窗） */
         .wish-toast {
             position: fixed;
             bottom: 40px;
@@ -461,7 +451,7 @@
             opacity: 1;
         }
 
-        /* Modal 弹窗（柔化边缘） */
+        /* Modal 弹窗 */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -478,7 +468,7 @@
         .modal.active { display: flex; opacity: 1; }
 
         .modal-content {
-            background: rgba(25Model, 25, 28, 0.88);
+            background: rgba(25, 25, 28, 0.88);
             backdrop-filter: blur(25px);
             border: 1px solid var(--border-color);
             border-radius: 32px;
@@ -504,7 +494,6 @@
             cursor: pointer;
         }
 
-        /* 📸 Modal 弹窗图片羽化 */
         .modal-img {
             width: 100%; height: 360px;
             border-radius: 24px;
@@ -533,10 +522,10 @@
         <div class="aurora-blob aurora-3"></div>
     </div>
 
-    <!-- 1. 导航栏 (极简，无灵动岛) -->
+    <!-- 1. 导航栏 -->
     <nav>
         <div class="nav-left">
-            <div class="nav-logo" onclick="scrollToSection('hero')">Ann's 18th Pro</div>
+            <div class="nav-logo">Ann's 18th Pro</div>
             <ul>
                 <li><a href="#hero" class="nav-link active">设计概览</a></li>
                 <li><a href="#story" class="nav-link">相伴故事</a></li>
@@ -545,7 +534,7 @@
         </div>
 
         <div class="nav-right">
-            <button class="nav-btn" onclick="fireConfetti()">盛放礼花 🎉</button>
+            <button class="nav-btn" onclick="letItSnow()">漫天雪花 ❄️</button>
         </div>
     </nav>
 
@@ -563,7 +552,8 @@
             </div>
 
             <div class="stage-wrapper">
-                <div class="stage-card" id="hero-stage" style="background-image: url('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg');" onclick="openDetailModal('18岁盛大呈现', '主视觉 01 · 阳光与笑颜', './52915dd2d34b30acc1c24ec513701e_livephoto.jpeg', '属于安怡宝宝的 18 岁高光时刻。满载着青春与欢笑。')">
+                <!-- 📸 已移除 onclick 跳转弹窗，纯图像展示 -->
+                <div class="stage-card" id="hero-stage" style="background-image: url('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg');">
                     <div class="stage-card-overlay">
                         <span>Apple Live View</span>
                         <h4 id="stage-caption">视角 01 · 阳光与笑颜</h4>
@@ -616,7 +606,7 @@
             </div>
         </section>
 
-        <!-- 🌟 许愿池互动模块（安怡宝宝专属许愿） -->
+        <!-- 🌟 许愿池互动模块 -->
         <section class="action-card" id="interactive">
             <h2 style="font-size: 2.2rem; margin:0 0 10px 0; color: #ffffff;">✨ 安怡宝宝的 18 岁许愿池</h2>
             <p style="color:var(--text-sub); font-size: 1rem;">写下你对成年的所有期许，极光会记住你的每一个愿望。</p>
@@ -629,11 +619,11 @@
 
     <!-- 许愿成功动态 Toast -->
     <div class="wish-toast" id="wishToast">
-        <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--apple-pink);"></i>
+        <i class="fa-solid fa-snowflake" style="color: #ffffff;"></i>
         <span id="toastMsg">愿望已锁定，正在加速实现中 ✨</span>
     </div>
 
-    <!-- Modal 弹出框 -->
+    <!-- Modal 弹出框 (保留故事模块使用) -->
     <div class="modal" id="modal" onclick="closeModal(event)">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
@@ -649,11 +639,39 @@
     </footer>
 
     <script>
+        // ❄️ 浪漫雪花特效函数
+        function letItSnow() {
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+
+            (function frame() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return;
+
+                confetti({
+                    particleCount: 3,
+                    startVelocity: 0,
+                    ticks: 300,
+                    origin: {
+                        x: Math.random(),
+                        y: Math.random() * 0.2 - 0.1
+                    },
+                    colors: ['#ffffff', '#f1d6e0', '#e0829d'],
+                    shapes: ['circle'],
+                    gravity: 0.4,
+                    scalar: 0.8,
+                    drift: Math.random() - 0.5
+                });
+
+                requestAnimationFrame(frame);
+            })();
+        }
+
         function makeWish() {
             const input = document.getElementById('wish-input');
             if (input.value.trim() !== '') {
-                fireConfetti();
-                showWishToast(`“${input.value}” 已收到！一定会实现的 ✨`);
+                letItSnow();
+                showWishToast(`“${input.value}” 已收到！一定会实现的 ❄️`);
                 input.value = '';
             }
         }
@@ -674,16 +692,7 @@
             const stage = document.getElementById('hero-stage');
             stage.style.backgroundImage = `url('${imgUrl}')`;
             document.getElementById('stage-caption').innerText = captionText;
-            fireConfetti();
-        }
-
-        function fireConfetti() {
-            confetti({
-                particleCount: 140,
-                spread: 80,
-                origin: { y: 0.7 },
-                colors: ['#e0829d', '#ffffff', '#7038ff', '#00b4d8']
-            });
+            letItSnow();
         }
 
         function openDetailModal(tag, title, imgUrl, bodyText) {
@@ -705,7 +714,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(fireConfetti, 400);
+            setTimeout(letItSnow, 400);
         });
     </script>
 </body>
