@@ -94,7 +94,7 @@
             100% { transform: translate(-30px, 50px) scale(0.9) rotate(-10deg); }
         }
 
-        /* --- 1. 导航栏（适配安全区与手机端） --- */
+        /* --- 1. 导航栏 --- */
         nav {
             position: fixed;
             top: 0;
@@ -195,15 +195,14 @@
             padding: 0 10px;
         }
 
-        /* 移动端横向可滑动的 Tab 切换器 */
         .switcher-wrapper {
             width: 100%;
             overflow-x: auto;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE/Edge */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             padding: 4px 0 16px 0;
         }
-        .switcher-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+        .switcher-wrapper::-webkit-scrollbar { display: none; }
 
         .apple-switcher {
             display: inline-flex;
@@ -241,7 +240,7 @@
         .stage-card {
             position: relative;
             width: 100%;
-            height: 55vw; /* 响应式高度 */
+            height: 55vw;
             min-height: 320px;
             max-height: 520px;
             border-radius: 24px;
@@ -307,7 +306,7 @@
 
         .stat-desc { font-size: 0.8rem; color: var(--text-sub); margin-top: 4px; }
 
-        /* --- 4. Bento Grid --- */
+        /* --- 4. Bento Grid (神秘感特别微调) --- */
         .section-header { text-align: center; margin-bottom: 24px; }
         .section-title { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px 0; color: #ffffff; }
         .section-sub { color: var(--text-sub); font-size: 0.85rem; }
@@ -325,40 +324,65 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
             border-radius: 24px;
-            padding: 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
             overflow: hidden;
             cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bento-box:hover {
+            transform: translateY(-4px);
+            border-color: var(--apple-pink);
+            box-shadow: 0 10px 30px rgba(224, 130, 157, 0.15);
         }
 
         .col-8 { grid-column: span 8; }
         .col-4 { grid-column: span 4; }
 
-        .box-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 6px 0; color: #ffffff; }
-        .box-p { font-size: 0.85rem; color: var(--text-sub); line-height: 1.4; margin: 0 0 12px 0; }
+        .box-title { font-size: 1.25rem; font-weight: 600; margin: 0 0 8px 0; color: #ffffff; }
+        .box-p { font-size: 0.88rem; color: var(--text-sub); line-height: 1.5; margin: 0 0 16px 0; }
+
+        /* 🔒 替换原图片的神秘占位框 */
+        .mystery-placeholder {
+            width: 100%;
+            height: 140px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(224, 130, 157, 0.08) 100%);
+            border: 1px dashed rgba(255, 255, 255, 0.18);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--apple-pink);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .bento-box:hover .mystery-placeholder {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(224, 130, 157, 0.15) 100%);
+            border-color: var(--apple-pink);
+        }
+
+        .mystery-placeholder i {
+            font-size: 20px;
+            filter: drop-shadow(0 0 8px var(--apple-pink-glow));
+        }
 
         .apple-link {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: #ffffff; 
+            color: var(--apple-pink); 
             font-size: 13px;
             font-weight: 500;
-        }
-
-        .box-img {
-            width: 100%;
-            height: 180px;
-            border-radius: 16px;
-            background-size: cover;
-            background-position: center;
-            margin-top: 12px;
-            position: relative;
-            mask-image: radial-gradient(circle, rgba(0,0,0,1) 65%, rgba(0,0,0,0.3) 100%);
-            -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 65%, rgba(0,0,0,0.3) 100%);
         }
 
         /* --- 5. 许愿池互动模块 --- */
@@ -398,7 +422,7 @@
             color: #ffffff;
             outline: none;
             font-size: 14px;
-            min-width: 0; /* 防止 input 撑破 flex */
+            min-width: 0;
         }
 
         .apple-send-btn {
@@ -442,7 +466,7 @@
             opacity: 1;
         }
 
-        /* Modal 弹窗（适配手机滚动） */
+        /* --- 6. Modal 弹窗（揭晓照片的核心区域） --- */
         .modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -491,11 +515,12 @@
 
         .modal-img {
             width: 100%; 
-            height: 220px;
+            height: 260px;
             border-radius: 16px;
             background-size: cover;
             background-position: center;
             margin-bottom: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
 
         footer { 
@@ -506,11 +531,9 @@
             border-top: 1px solid var(--border-color); 
         }
 
-        /* --- 📱 移动端针对性优化媒体查询 --- */
         @media (max-width: 768px) {
-            nav ul { display: none; } /* 移动端隐藏文字导航，保持顶栏清爽 */
+            nav ul { display: none; }
             .col-8, .col-4 { grid-column: span 12; }
-            .box-img { height: 160px; }
             .action-card h2 { font-size: 1.5rem !important; }
             .action-card p { font-size: 0.85rem !important; }
         }
@@ -548,7 +571,6 @@
             <h1 class="hero-title">安怡宝宝，18岁生日快乐</h1>
             <p class="hero-sub">18岁的第一章，带着爱与自由，开启属于你的无限可能。</p>
 
-            <!-- 移动端可滑动 Switcher -->
             <div class="switcher-wrapper">
                 <div class="apple-switcher">
                     <button class="switch-tab active" onclick="changeHero('./52915dd2d34b30acc1c24ec513701e_livephoto.jpeg', '视角 01 · 馋馋和iPad', this)">01</button>
@@ -584,30 +606,38 @@
             </div>
         </section>
 
-        <!-- Bento Grid 图文模块 -->
+        <!-- Bento Grid 相伴故事（页面不展示图片，保留神秘感） -->
         <section id="story">
             <div class="section-header">
-                <h2 class="section-title">相伴故事，精致呈现。</h2>
-                <div class="section-sub">点击卡片唤醒专属故事细节 ➔</div>
+                <h2 class="section-title">相伴故事，精彩呈现。</h2>
+                <div class="section-sub">点击卡片唤醒专属神秘记忆 ➔</div>
             </div>
 
             <div class="bento-container">
+                <!-- 故事卡片 1 -->
                 <div class="bento-box col-8" onclick="openDetailModal('陪伴者', '最可爱的小猫 —— 馋馋', './image_f5541bcac111f3aa3ec744526eba46bf.jpeg', '从第一次相遇到每一个日夜的陪伴，馋馋始终在身边守护着安怡宝宝的成长。')">
                     <div>
                         <div class="box-title">最可爱的小猫 —— 馋馋</div>
                         <div class="box-p">从第一次相遇到每一个日夜的陪伴，馋馋始终在身边守护着安怡宝宝的成长。</div>
-                        <span class="apple-link">探索故事细节 <i class="fa-solid fa-chevron-right"></i></span>
+                        <span class="apple-link">揭晓珍贵照片 <i class="fa-solid fa-chevron-right"></i></span>
                     </div>
-                    <div class="box-img" style="background-image: url('./image_f5541bcac111f3aa3ec744526eba46bf.jpeg');"></div>
+                    <div class="mystery-placeholder">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>神秘回忆已锁定 · 点击解锁相册</span>
+                    </div>
                 </div>
 
+                <!-- 故事卡片 2 -->
                 <div class="bento-box col-4" onclick="openDetailModal('闪耀特质', '满分可爱，不止一面', './lp_image.jpeg', '捕捉每一次发自内心的璀璨笑颜。无论是搞怪还是温柔，安怡宝宝总是能给周围带来满满的能量。')">
                     <div>
                         <div class="box-title">满分可爱</div>
                         <div class="box-p">捕捉每一次发自内心的笑容。</div>
-                        <span class="apple-link">查看详情 <i class="fa-solid fa-chevron-right"></i></span>
+                        <span class="apple-link">查看精彩呈现 <i class="fa-solid fa-chevron-right"></i></span>
                     </div>
-                    <div class="box-img" style="background-image: url('./lp_image.jpeg');"></div>
+                    <div class="mystery-placeholder">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>点开查看精彩影像</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -629,7 +659,7 @@
         <span id="toastMsg">愿望已锁定，正在加速实现中 ✨</span>
     </div>
 
-    <!-- Modal 弹出框 -->
+    <!-- Modal 弹出框（点开后在此展现精彩图片） -->
     <div class="modal" id="modal" onclick="closeModal(event)">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModalDirect()"><i class="fa-solid fa-xmark"></i></button>
@@ -679,7 +709,6 @@
                 letItSnow();
                 showWishToast(`“${input.value}” 已收到！一定会实现的 ❄️`);
                 input.value = '';
-                // 手机端收起软键盘
                 input.blur();
             }
         }
@@ -711,8 +740,8 @@
 
             const modal = document.getElementById('modal');
             modal.classList.add('active');
-            // 防止背景穿透滚动
             document.body.style.overflow = 'hidden';
+            letItSnow(); /* 揭晓照片时触发雪花庆祝效果 */
         }
 
         function closeModal(e) {
