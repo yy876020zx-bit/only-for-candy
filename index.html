@@ -511,14 +511,15 @@
             border-radius: 50%;
             cursor: pointer;
             z-index: 10;
-        }
-
+               }
         .modal-img {
             width: 100%; 
-            height: 260px;
+            height: 350px; /* 可根据需要调大高度 */
             border-radius: 16px;
-            background-size: cover;
+            background-size: contain; /* 👈 从 cover 改为 contain：确保整张图片完全显示，不截断 */
             background-position: center;
+            background-repeat: no-repeat; /* 👈 防止图片自适应缩小后重复拼接 */
+            background-color: rgba(0, 0, 0, 0.3); /* 图片两侧或上下留白时填充暗色背景 */
             margin-bottom: 16px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
