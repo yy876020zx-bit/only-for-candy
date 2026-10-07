@@ -5,7 +5,7 @@
   function startIntroTranslation(onComplete) {
     if (!introScreen || !introTitle) { onComplete(); return; }
     const fromText = '카피플릭스';
-    const toText = 'CAFYFLIX';
+    const toText = 'CAYFLIX';
     const glyphs = 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ가나다라마바사';
     const spans = text => [...text].map(char => `<span class="char">${char}</span>`).join('');
     introTitle.innerHTML = spans(fromText);
