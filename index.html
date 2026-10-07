@@ -1343,7 +1343,7 @@
       .credits-closing-text { font-size: 1.6rem; }
     }
   </style>
-  <link rel="stylesheet" href="css/featured-videos.css">
+  <link rel="stylesheet" href="css/featured-videos.css?v=20261007-faststart">
   <link rel="stylesheet" href="css/secret-translator.css?v=20261007-2">
   <link rel="stylesheet" href="css/episode-experience.css?v=20261007-2">
   <link rel="stylesheet" href="css/mobile.css?v=20261007-2">
@@ -1454,8 +1454,8 @@
   <!-- 1. 第一集：今天的女主角 -->
   <div id="modal-episode" class="cinema-modal episode-video-modal hidden" role="dialog" aria-modal="true" aria-label="第一集视频">
     <button id="btn-close-episode" class="episode-video-close" type="button" aria-label="关闭视频">×</button>
-    <video id="episode-entry-video" src="assets/videos/intro-cropped.mp4" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" aria-label="第一集进场画面"></video>
-    <video id="ep-player-video" src="assets/videos/episode-01-main.mp4" controls playsinline preload="metadata" hidden aria-label="第一集正片"></video>
+    <video id="episode-entry-video" src="assets/videos/intro-cropped.mp4?v=20261007-faststart" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" aria-label="第一集进场画面"></video>
+    <video id="ep-player-video" src="assets/videos/episode-01-main.mp4" controls playsinline preload="none" hidden aria-label="第一集正片"></video>
   </div>
 
   <!-- 2. 照片回忆全屏放映画廊 -->
@@ -1603,7 +1603,7 @@
           id: "rec_drama",
           title: "《爱情怎么翻译》",
           koreanTitle: "이 사랑 통역 되나요",
-          image: "assets/photos/love_translated_cover_clean.png",
+          image: "assets/photos/love_translated_cover_clean.jpg",
           tags: ["浪漫", "喜剧"],
           description: "世界上有多少人就有多少种语言，每个人都使用着自己都语言，所以会相互不理解，曲解对方，甚至口出狂言。",
           duration: "完整珍藏",
@@ -2147,7 +2147,7 @@
 
         c.innerHTML = `
           <div class="card-media">
-            <img src="${item.image || ''}" alt="${item.title}" class="card-cover-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <img src="${item.image || ''}" alt="${item.title}" class="card-cover-img" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <div class="card-svg-fallback" style="display:none; width:100%; height:100%;">
               ${createCinemaPosterSVG(item.title, item.koreanTitle, item.color || '#111')}
             </div>
@@ -2170,7 +2170,7 @@
       rowMore.innerHTML = `
         <div class="stream-card special-egg-media" id="card-secret-egg">
           <div class="card-media">
-            <img src="assets/photos/special-scene.avif" alt="Special Scene" class="card-cover-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <img src="assets/photos/special-scene.jpg" alt="Special Scene" class="card-cover-img" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <div class="card-svg-fallback" style="display:none; width:100%; height:100%;">
               ${createCinemaPosterSVG('SPECIAL SCENE', '미공개 특별편', '#120b17')}
             </div>
@@ -2211,7 +2211,7 @@
       };
     });
   </script>
-  <script src="js/featured-videos.js"></script>
+  <script src="js/featured-videos.js?v=20261007-faststart"></script>
   <script src="js/episode-experience.js?v=20261007-2"></script>
   <script src="js/secret-translator.js?v=20261007-2"></script>
 </body>

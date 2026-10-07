@@ -140,7 +140,7 @@ body, #screen-home, .stream-section { background: #000 !important; }
   padding: 0 7.6%;
   border: 0;
   border-radius: 0;
-  background: #000 url('../assets/photos/hero_aurora_snowforest.png') center 56% / cover no-repeat !important;
+  background: #000 url('../assets/photos/hero_aurora_snowforest.jpg') center 56% / cover no-repeat !important;
   box-shadow: none;
   isolation: isolate;
 }

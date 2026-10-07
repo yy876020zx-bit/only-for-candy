@@ -2062,7 +2062,7 @@ body, #screen-home, .stream-section { background: #000 !important; }
   padding: 0 7.6%;
   border: 0;
   border-radius: 0;
-  background: #000 url('assets/photos/hero_aurora_snowforest.png') center 56% / cover no-repeat !important;
+  background: #000 url('assets/photos/hero_aurora_snowforest.jpg') center 56% / cover no-repeat !important;
   box-shadow: none;
   isolation: isolate;
 }
@@ -2526,8 +2526,8 @@ body, #screen-home, .stream-section { background: #000 !important; }
   <!-- 1. Episode 01: 今天的女主角 播放器模态框 -->
   <div id="modal-episode" class="cinema-modal episode-video-modal hidden" role="dialog" aria-modal="true" aria-label="第一集视频">
     <button id="btn-close-episode" class="episode-video-close" type="button" aria-label="关闭视频">×</button>
-    <video id="episode-entry-video" src="assets/videos/intro-cropped.mp4" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" aria-label="第一集进场画面"></video>
-    <video id="ep-player-video" src="assets/videos/episode-01-main.mp4" controls playsinline preload="metadata" hidden aria-label="第一集正片"></video>
+    <video id="episode-entry-video" src="assets/videos/intro-cropped.mp4?v=20261007-faststart" playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" aria-label="第一集进场画面"></video>
+    <video id="ep-player-video" src="assets/videos/episode-01-main.mp4" controls playsinline preload="none" hidden aria-label="第一集正片"></video>
   </div>
 
   <!-- 2. 照片回忆全屏剧场 -->
@@ -2754,7 +2754,7 @@ window.ANYI_CONFIG = {
       subtitle: "Can This Love Be Translated?",
       tags: ["浪漫", "喜剧"],
       description: "世界上有多少人就有多少种语言，每个人都使用着自己都语言，所以会相互不理解，曲解对方，甚至口出狂言。",
-      poster: "assets/photos/love_translated_cover_clean.png",
+      poster: "assets/photos/love_translated_cover_clean.jpg",
       duration: "完整珍藏"
     }
   ],
@@ -3950,7 +3950,7 @@ document.addEventListener('DOMContentLoaded', () => {
       rowMore.innerHTML = 
         '<div class="stream-card more-card easter-egg-trigger" id="card-easter-egg">' +
           '<div class="card-media special-egg-media">' +
-            '<img src="' + 'assets/photos/special-scene.avif' + '" alt="Special Scene">' +
+            '<img src="' + 'assets/photos/special-scene.jpg' + '" alt="Special Scene">' +
             '<div class="easter-glow-ring"></div>' +
             '<div class="secret-tag">SPECIAL SCENE</div>' +
           '</div>' +
@@ -4458,14 +4458,14 @@ document.addEventListener('DOMContentLoaded', () => {
     rec_drama: {
       title: '爱情怎么翻译',
       eyebrow: '官方预告片',
-      videos: [['官方预告片', 'assets/videos/love-translated-trailer.mp4']]
+      videos: [['官方预告片', 'assets/videos/love-translated-trailer.mp4?v=20261007-faststart']]
     }
   };
 
   const modal = document.createElement('div');
   modal.className = 'featured-video-modal';
   modal.hidden = true;
-  modal.innerHTML = '<div class="featured-video-panel" role="dialog" aria-modal="true" aria-labelledby="featured-video-title"><button class="featured-video-close" type="button" aria-label="关闭播放器">✕</button><div class="featured-video-layout"><div class="featured-video-content"><p class="featured-video-eyebrow"></p><h2 id="featured-video-title"></h2><p class="featured-video-description"></p><div class="featured-video-list"></div></div><div class="featured-video-stage"><video controls playsinline preload="metadata"></video></div></div></div>';
+  modal.innerHTML = '<div class="featured-video-panel" role="dialog" aria-modal="true" aria-labelledby="featured-video-title"><button class="featured-video-close" type="button" aria-label="关闭播放器">✕</button><div class="featured-video-layout"><div class="featured-video-content"><p class="featured-video-eyebrow"></p><h2 id="featured-video-title"></h2><p class="featured-video-description"></p><div class="featured-video-list"></div></div><div class="featured-video-stage"><video controls playsinline preload="none"></video></div></div></div>';
   document.body.appendChild(modal);
   const player = modal.querySelector('video');
   const list = modal.querySelector('.featured-video-list');

@@ -12,14 +12,14 @@
     rec_drama: {
       title: '爱情怎么翻译',
       eyebrow: '官方预告片',
-      videos: [['官方预告片', 'assets/videos/love-translated-trailer.mp4']]
+      videos: [['官方预告片', 'assets/videos/love-translated-trailer.mp4?v=20261007-faststart']]
     }
   };
 
   const modal = document.createElement('div');
   modal.className = 'featured-video-modal';
   modal.hidden = true;
-  modal.innerHTML = '<div class="featured-video-panel" role="dialog" aria-modal="true" aria-labelledby="featured-video-title"><button class="featured-video-close" type="button" aria-label="关闭播放器">✕</button><div class="featured-video-layout"><div class="featured-video-content"><p class="featured-video-eyebrow"></p><h2 id="featured-video-title"></h2><p class="featured-video-description"></p><div class="featured-video-list"></div></div><div class="featured-video-stage"><video controls playsinline preload="metadata"></video></div></div></div>';
+  modal.innerHTML = '<div class="featured-video-panel" role="dialog" aria-modal="true" aria-labelledby="featured-video-title"><button class="featured-video-close" type="button" aria-label="关闭播放器">✕</button><div class="featured-video-layout"><div class="featured-video-content"><p class="featured-video-eyebrow"></p><h2 id="featured-video-title"></h2><p class="featured-video-description"></p><div class="featured-video-list"></div></div><div class="featured-video-stage"><video controls playsinline preload="none"></video></div></div></div>';
   document.body.appendChild(modal);
   const player = modal.querySelector('video');
   const list = modal.querySelector('.featured-video-list');
