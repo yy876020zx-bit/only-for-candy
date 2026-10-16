@@ -30,6 +30,7 @@ async function fetchPart(assets, requestURL, part, start, end) {
     if (response.headers.get('Content-Range') !== expected) throw new Error('Incorrect media segment range');
     return response.body;
   }
+  if (localStart === 0 && localEnd === part.size - 1) return response.body;
   // Keep byte ranges correct even if an asset service returns the whole segment.
   const reader = response.body.getReader();
   let position = 0;

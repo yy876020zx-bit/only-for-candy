@@ -21,13 +21,14 @@ async function copy(relative) {
     }
     return;
   }
-  if (info.size <= assetLimit) {
+  const isVideo = relative.startsWith('assets/videos/') && relative.endsWith('.mp4');
+  if (info.size <= assetLimit && !isVideo) {
     const destination = path.join(output, relative);
     await mkdir(path.dirname(destination), { recursive: true });
     await copyFile(source, destination);
     return;
   }
-  if (!relative.startsWith('assets/videos/') || !relative.endsWith('.mp4')) {
+  if (!isVideo) {
     throw new Error(`Asset exceeds Cloudflare's limit: ${relative}`);
   }
   const folder = `/__media-parts/${path.basename(relative, '.mp4')}`;

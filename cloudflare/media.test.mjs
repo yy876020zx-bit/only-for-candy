@@ -110,3 +110,12 @@ test('every deployment asset fits Cloudflare limit; complete page is retained', 
   await check(path.join(root, 'dist-cloudflare'));
   assert.deepEqual(await readFile(path.join(root, 'dist-cloudflare/index.html')), await readFile(path.join(root, 'index.html')));
 });
+test('all six video paths support byte-range requests, even when storage ignores Range', async () => {
+  assert.equal(Object.keys(manifest).length, 6);
+  for (const [pathname, metadata] of Object.entries(manifest)) {
+    const result = await worker.fetch(new Request(`https://candy.test${pathname}`, { headers: { Range: 'bytes=0-1023' } }), { ASSETS: assetService(true) });
+    assert.equal(result.status, 206, pathname);
+    assert.equal(result.headers.get('Content-Range'), `bytes 0-1023/${metadata.size}`);
+    assert.deepEqual(Buffer.from(await result.arrayBuffer()), (await readFile(path.join(root, pathname))).subarray(0, 1024));
+  }
+});
